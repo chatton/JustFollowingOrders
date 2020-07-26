@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ContentModelStore">
+    <e p="$USER_HOME$/Library/Caches/JetBrains/Rider2020.1/extResources" t="IncludeRecursive" />
+    <e p="$USER_HOME$/Library/Caches/JetBrains/Rider2020.1/resharper-host/local/Transient/ReSharperHost/v201/SolutionCaches/_OrdersUp.1752616026.00" t="ExcludeRecursive" />
+    <e p="$PROJECT_DIR$" t="IncludeRecursive">
+      <e p="Assembly-CSharp.csproj" t="IncludeRecursive" />
+      <e p="Assets" t="Include">
+        <e p="PaidAssets" t="Include">
+          <e p="KUBIKOS - World" t="Include">
+            <e p="Scripts" t="Include">
+              <e p="EnableCameraDepthInForward.cs" t="Include" />
+            </e>
+            <e p="Shaders" t="Include">
+              <e p="Cloud_Shader.shader" t="Include" />
+              <e p="CustomStandardSpecular.shader" t="Include" />
+              <e p="Fog_Shader.shader" t="Include" />
+              <e p="Ice_Shader.shader" t="Include" />
+              <e p="Lava_Shader.shader" t="Include" />
+              <e p="Magma_Shader.shader" t="Include" />
+              <e p="PlaneLava_Shader.shader" t="Include" />
+              <e p="PlaneWater_Shader.shader" t="Include" />
+              <e p="Sun_Shader.shader" t="Include" />
+              <e p="Surface_Shader.shader" t="Include" />
+              <e p="Water_Shader.shader" t="Include" />
+              <e p="WaterGreen_Shader.shader" t="Include" />
+            </e>
+            <e p="URP Support" t="Include">
+              <e p="Shaders URP" t="Include">
+                <e p="Cloud_Shader.shader" t="Include" />
+                <e p="CustomStandardSpecular.shader" t="Include" />
+                <e p="fade.shader" t="Include" />
+                <e p="Ice_Shader.shader" t="Include" />
+                <e p="Lava_Shader.shader" t="Include" />
+                <e p="Magma_Shader.shader" t="Include" />
+                <e p="PlaneLava_Shader.shader" t="Include" />
+                <e p="PlaneWater_Shader.shader" t="Include" />
+                <e p="Surface_Shader.shader" t="Include" />
+                <e p="Vertical Fog.shader" t="Include" />
+                <e p="Water_Shader.shader" t="Include" />
+                <e p="WaterGreen_Shader.shader" t="Include" />
+              </e>
+            </e>
+          </e>
+          <e p="Toon_RTS" t="Include">
+            <e p="WesternKingdoms" t="Include">
+              <e p="Toon RTS Units - Latest update.txt" t="Include" />
+            </e>
+          </e>
+        </e>
+        <e p="Scripts" t="Include">
+          <e p="Commands" t="Include">
+            <e p="ICommand.cs" t="Include" />
+            <e p="ICommandAssignable.cs" t="Include" />
+            <e p="IProgrammable.cs" t="Include" />
+            <e p="MoveCommand.cs" t="Include" />
+            <e p="MoveDirection.cs" t="Include" />
+            <e p="RotationCommand.cs" t="Include" />
+            <e p="RotationDirection.cs" t="Include" />
+            <e p="WaitCommand.cs" t="Include" />
+          </e>
+          <e p="Core" t="Include">
+            <e p="Unit.cs" t="Include" />
+          </e>
+          <e p="Movement" t="Include">
+            <e p="Mover.cs" t="Include" />
+          </e>
+          <e p="Systems" t="Include">
+            <e p="CommandBuffer.cs" t="Include" />
+            <e p="CommandProcessor.cs" t="Include" />
+            <e p="MouseController.cs" t="Include" />
+          </e>
+          <e p="UI" t="Include">
+            <e p="ActionButton.cs" t="Include" />
+          </e>
+          <e p="Util" t="Include">
+            <e p="Singleton.cs" t="Include" />
+          </e>
+          <e p="World" t="Include">
+            <e p="Tile.cs" t="Include" />
+          </e>
+        </e>
+        <e p="TextMesh Pro" t="Include">
+          <e p="Fonts" t="Include">
+            <e p="LiberationSans - OFL.txt" t="Include" />
+          </e>
+          <e p="Resources" t="Include">
+            <e p="LineBreaking Following Characters.txt" t="Include" />
+            <e p="LineBreaking Leading Characters.txt" t="Include" />
+            <e p="Shaders" t="Include">
+              <e p="TMP_Bitmap-Custom-Atlas.shader" t="Include" />
+              <e p="TMP_Bitmap-Mobile.shader" t="Include" />
+              <e p="TMP_Bitmap.shader" t="Include" />
+              <e p="TMP_SDF Overlay.shader" t="Include" />
+              <e p="TMP_SDF-Mobile Masking.shader" t="Include" />
+              <e p="TMP_SDF-Mobile Overlay.shader" t="Include" />
+              <e p="TMP_SDF-Mobile.shader" t="Include" />
+              <e p="TMP_SDF-Surface-Mobile.shader" t="Include" />
+              <e p="TMP_SDF-Surface.shader" t="Include" />
+              <e p="TMP_SDF.shader" t="Include" />
+              <e p="TMP_Sprite.shader" t="Include" />
+              <e p="TMPro.cginc" t="Include" />
+              <e p="TMPro_Properties.cginc" t="Include" />
+              <e p="TMPro_Surface.cginc" t="Include" />
+            </e>
+          </e>
+          <e p="Sprites" t="Include">
+            <e p="EmojiOne Attribution.txt" t="Include" />
+          </e>
+        </e>
+      </e>
+      <e p="obj" t="ExcludeRecursive" />
+      <e p="OrdersUp.sln" t="IncludeFlat" />
+      <e p="Packages" t="ExcludeRecursive" />
+      <e p="Temp/bin" t="ExcludeRecursive" />
+    </e>
+  </component>
+</project>
