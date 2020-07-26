@@ -9,36 +9,43 @@ namespace Systems
 {
     public class CommandProcessor : Singleton<CommandProcessor>
     {
+        [SerializeField] private float commandSpeed = 5f;
         public bool IsProcessingCommands => false;
 
         private IProgrammable[] _programmables;
-        private Stack<IEnumerable<ICommand>> _undoStack;
+        private Stack<IEnumerable<Command>> _undoStack;
 
         void Awake()
         {
-            _undoStack = new Stack<IEnumerable<ICommand>>();
+            _undoStack = new Stack<IEnumerable<Command>>();
             _programmables = FindObjectsOfType<MonoBehaviour>().OfType<IProgrammable>().ToArray();
+            CommandBuffer.Instance.OnAssignCommands +=
+                () => StartCoroutine(CommandProcessor.Instance.ProcessCommands());
         }
 
-        void Update()
+        public IEnumerator ProcessCommands()
         {
-            if (_programmables.All(p => !p.HasNextCommand()))
+            while (!_programmables.All(p => p.HasCompletedAllCommands()))
             {
-                Debug.Log("All commands finished running.");
-                return; // no commands left to run!
-            }
+                if (_programmables.All(p => !p.HasNextCommand()))
+                {
+                    Debug.Log("All commands finished running.");
+                    yield break;
+                }
 
-            ExecuteAllCommands();
+                yield return ExecuteAllCommands();
 
-            bool allCommandsFinished = _programmables.All(p => p.CurrentCommand().IsFinished());
+                bool allCommandsFinished =
+                    _programmables.All(p => p.CurrentCommand() == null || p.CurrentCommand().IsFinished());
 
-            if (allCommandsFinished)
-            {
-                ProgressToNextCommands();
+                if (allCommandsFinished)
+                {
+                    ProgressToNextCommands();
+                }
             }
         }
 
-        private void ExecuteAllCommands()
+        private IEnumerator ExecuteAllCommands()
         {
             foreach (IProgrammable programmable in _programmables)
             {
@@ -47,17 +54,26 @@ namespace Systems
                     continue;
                 }
 
-                ICommand command = programmable.CurrentCommand();
-                command.Execute(Time.deltaTime);
+                Command command = programmable.CurrentCommand();
+                if (command != null)
+                {
+                    command.Execute(Time.deltaTime);
+                    yield return new WaitForSeconds(Time.deltaTime / commandSpeed);
+                }
             }
         }
 
         private void ProgressToNextCommands()
         {
-            List<ICommand> undoList = new List<ICommand>();
+            List<Command> undoList = new List<Command>();
             foreach (IProgrammable programmable in _programmables)
             {
-                undoList.Add(programmable.CurrentCommand());
+                Command command = programmable.CurrentCommand();
+                if (command != null)
+                {
+                    undoList.Add(programmable.CurrentCommand());
+                }
+
                 programmable.MoveOntoNextCommand();
             }
 
@@ -68,7 +84,7 @@ namespace Systems
         {
             if (_undoStack.Count > 0)
             {
-                foreach (ICommand command in _undoStack.Pop())
+                foreach (Command command in _undoStack.Pop())
                 {
                     command.Undo();
                 }

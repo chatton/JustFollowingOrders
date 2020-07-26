@@ -1,16 +1,16 @@
 namespace Commands
 {
-    public class WaitCommand : ICommand
+    public class WaitCommand : Command
     {
-        public void Execute(float _)
+        public override void Execute(float _)
         {
         }
 
-        public void Undo()
+        public override void Undo()
         {
         }
 
-        public bool IsFinished()
+        public override bool IsFinished()
         {
             return true;
         }

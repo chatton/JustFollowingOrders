@@ -2,47 +2,48 @@ using System;
 using System.Collections.Generic;
 using Movement;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Commands
 {
-    public class MoveCommand : ICommand
+    public class MoveCommand : Command
     {
-        private readonly Mover _mover;
-        private readonly MoveDirection _direction;
+        [SerializeField] public MoveDirection direction;
+        private Mover _mover;
 
         private Vector3? _targetPosition;
         private Vector3 _initialPosition;
         private Quaternion _initialRotation;
 
-        public MoveCommand(Mover mover, MoveDirection direction)
+        private void Awake()
         {
-            _mover = mover;
-            _direction = direction;
+            _mover = GetComponentInParent<Mover>();
             _targetPosition = null;
         }
 
-        public void Execute(float deltaTime)
+
+        public override void Execute(float deltaTime)
         {
             // compute relative position when execute is called
             if (_targetPosition == null)
             {
-                _targetPosition = GetTargetPosition(_direction);
-                Transform transform = _mover.transform;
-                _initialPosition = transform.position;
-                _initialRotation = transform.rotation;
+                _targetPosition = GetTargetPosition(direction);
+                Transform t = _mover.transform;
+                _initialPosition = t.position;
+                _initialRotation = t.rotation;
             }
 
             _mover.MoveTowards(_targetPosition.Value, deltaTime);
         }
 
-        public void Undo()
+        public override void Undo()
         {
-            Transform transform = _mover.transform;
-            transform.position = _initialPosition;
-            transform.rotation = _initialRotation;
+            Transform t = _mover.transform;
+            t.position = _initialPosition;
+            t.rotation = _initialRotation;
         }
 
-        public bool IsFinished()
+        public override bool IsFinished()
         {
             return _mover.transform.position == _targetPosition;
         }

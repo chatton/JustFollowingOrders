@@ -9,23 +9,22 @@ namespace UI
 {
     public class ActionButton : MonoBehaviour
     {
-        private Dictionary<string, Func<ICommand>> commandFuncs;
-
-        [SerializeField] private Mover _mover;
+        private Dictionary<string, Func<Command>> commandFuncs;
 
         private void Awake()
         {
-            _mover = FindObjectOfType<Mover>();
-            commandFuncs = new Dictionary<string, Func<ICommand>>
+            commandFuncs = new Dictionary<string, Func<Command>>
             {
-                {"MoveForward", () => new MoveCommand(_mover, MoveDirection.Forward)},
-                {"MoveBack", () => new MoveCommand(_mover, MoveDirection.Back)},
-                {"MoveLeft", () => new MoveCommand(_mover, MoveDirection.Left)},
-                {"MoveRight", () => new MoveCommand(_mover, MoveDirection.Right)},
-                {"RotateRight", () => new RotationCommand(_mover, RotationDirection.Right)},
-                {"RotateLeft", () => new RotationCommand(_mover, RotationDirection.Left)}
+                {"MoveForward", () => CommandFactory.Instance.CreateMovementCommand(MoveDirection.Forward, _mover.transform)},
+                {"MoveBack", () => CommandFactory.Instance.CreateMovementCommand(MoveDirection.Back, _mover.transform)},
+                {"MoveLeft", () => CommandFactory.Instance.CreateMovementCommand(MoveDirection.Left, _mover.transform)},
+                {"MoveRight", () => CommandFactory.Instance.CreateMovementCommand(MoveDirection.Right, _mover.transform)},
+                {"RotateRight", () => CommandFactory.Instance.CreateRotationCommand(RotationDirection.Right, _mover.transform)},
+                {"RotateLeft", () => CommandFactory.Instance.CreateRotationCommand(RotationDirection.Left, _mover.transform)}
             };
         }
+
+        [SerializeField] private Mover _mover;
 
 
         public void EnqueueAction(string actionName)

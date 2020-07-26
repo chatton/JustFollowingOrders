@@ -4,43 +4,44 @@ using UnityEngine;
 
 namespace Commands
 {
-    public class RotationCommand : ICommand
+    public class RotationCommand : Command
     {
-        private readonly Mover _mover;
-        private readonly RotationDirection _direction;
+        [SerializeField] public RotationDirection direction;
+        private Mover _mover;
+
         private Quaternion? _startingRotation;
         private Quaternion _expectedQuaternion;
         private float _expectedY;
 
-        public RotationCommand(Mover mover, RotationDirection direction)
+
+        private void Awake()
         {
-            _mover = mover;
-            _direction = direction;
+            _mover = GetComponentInParent<Mover>();
         }
 
-        public void Execute(float deltaTime)
+        public override void Execute(float deltaTime)
         {
             if (_startingRotation == null)
             {
                 Quaternion rotation = _mover.transform.rotation;
                 _startingRotation = rotation;
-                _expectedY = (rotation.eulerAngles.y + GetYAxisRotationAngle(_direction)) % 360;
+                _expectedY = (rotation.eulerAngles.y + GetYAxisRotationAngle(direction)) % 360;
             }
 
             if (_startingRotation != null)
             {
                 // we need to account for our current angle. We add the rotation angle on top of where we currently are
-                _mover.Rotate(_startingRotation.Value.eulerAngles.y + GetYAxisRotationAngle(_direction), deltaTime);
+                _mover.Rotate(_startingRotation.Value.eulerAngles.y + GetYAxisRotationAngle(direction), deltaTime);
             }
         }
 
 
-        public void Undo()
+        public override void Undo()
         {
-            _mover.transform.Rotate(Vector3.up, -GetYAxisRotationAngle(_direction));
+            _mover.transform.Rotate(Vector3.up, -GetYAxisRotationAngle(direction));
         }
 
-        public bool IsFinished()
+        public override bool IsFinished()
         {
             if (_startingRotation == null)
             {

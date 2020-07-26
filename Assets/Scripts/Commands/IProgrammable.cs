@@ -3,7 +3,11 @@ namespace Commands
     public interface IProgrammable
     {
         void MoveOntoNextCommand();
-        ICommand CurrentCommand();
+        Command CurrentCommand();
         bool HasNextCommand();
+
+
+        bool HasCompletedAllCommands();
+        // void AddCommand(Command command);
     }
 }

@@ -11,14 +11,16 @@ namespace Systems
     public class CommandBuffer : Singleton<CommandBuffer>
     {
         [SerializeField] private Unit unit;
-        private List<ICommand> _commands;
+
+        public event Action OnAssignCommands;
+        private List<Command> _commands;
 
         private void Awake()
         {
-            _commands = new List<ICommand>();
+            _commands = new List<Command>();
         }
 
-        public void AddCommand(ICommand command)
+        public void AddCommand(Command command)
         {
             _commands.Add(command);
         }
@@ -26,6 +28,7 @@ namespace Systems
         public void AssignCommands()
         {
             unit.AssignCommands(_commands);
+            OnAssignCommands?.Invoke();
         }
     }
 }
