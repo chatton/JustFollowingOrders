@@ -60,6 +60,11 @@ namespace Systems
             {
                 if (!programmable.HasNextCommand())
                 {
+                    // if (_priorityCommand != null)
+                    // {
+                    //     yield return HandlePriorityCommand(null);
+                    // }
+
                     continue;
                 }
 
@@ -88,7 +93,7 @@ namespace Systems
 
                     // TODO: remove command or something when it's not possible to perform it. For now just 
                     // skip over it
-                    if (command.CanPerformCommand())
+                    if (command.CanPerformCommand() || _priorityCommand != null)
                     {
                         bool stillCompletingPreviousCommand =
                             !command.IsFinished() && command == _previousCommands[programmable];
@@ -128,7 +133,11 @@ namespace Systems
 
         private IEnumerator HandlePriorityCommand(Command currentCommand)
         {
-            currentCommand.AfterConsecutiveCommands();
+            if (currentCommand != null)
+            {
+                currentCommand.AfterConsecutiveCommands();
+            }
+
             yield return new WaitForSeconds(_afterSeconds);
             _afterSeconds = 0;
             _priorityCommand.Execute(Time.deltaTime);
