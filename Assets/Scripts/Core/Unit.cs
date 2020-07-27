@@ -37,9 +37,14 @@ namespace Core
             return _commandIndex < _commands.Count;
         }
 
+        public bool OnLastCommand()
+        {
+            return _commandIndex == _commands.Count - 1;
+        }
+
         public bool HasCompletedAllCommands()
         {
-            return _commandIndex == _commands.Count - 1 && CurrentCommand().IsFinished();
+            return OnLastCommand() && CurrentCommand().IsFinished();
         }
 
         public void AssignCommands(IEnumerable<Command> commands)

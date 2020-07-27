@@ -6,6 +6,8 @@ namespace Commands
         Command CurrentCommand();
         bool HasNextCommand();
 
+        bool OnLastCommand();
+
 
         bool HasCompletedAllCommands();
         // void AddCommand(Command command);

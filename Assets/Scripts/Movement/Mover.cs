@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace Movement
 {
@@ -7,10 +8,22 @@ namespace Movement
         [SerializeField] private float moveSpeed = 1f;
         [SerializeField] private float rotateSpeed = 100f;
 
+        public event Action OnMove;
+        public event Action OnStop;
+
 
         public void MoveTowards(Vector3 targetPosition, float deltaTme)
         {
             Vector3 currentPosition = transform.position;
+
+            if (currentPosition == targetPosition)
+            {
+                OnStop?.Invoke();
+                return;
+            }
+            
+            OnMove?.Invoke();
+
             Vector3 newPosition = Vector3.MoveTowards(currentPosition, targetPosition, deltaTme * moveSpeed);
             transform.position = newPosition;
 
@@ -18,6 +31,7 @@ namespace Movement
             if (closeEnough)
             {
                 transform.position = targetPosition;
+                OnStop?.Invoke();
             }
         }
 

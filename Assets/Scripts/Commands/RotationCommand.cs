@@ -19,6 +19,14 @@ namespace Commands
             _mover = GetComponentInParent<Mover>();
         }
 
+        public override void BeforeConsecutiveCommands()
+        {
+        }
+
+        public override void AfterConsecutiveCommands()
+        {
+        }
+
         public override void Execute(float deltaTime)
         {
             if (_startingRotation == null)

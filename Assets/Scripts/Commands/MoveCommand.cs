@@ -10,23 +10,51 @@ namespace Commands
     {
         [SerializeField] public MoveDirection direction;
         private Mover _mover;
+        private Animator _animator;
 
         private Vector3? _targetPosition;
         private Vector3 _initialPosition;
         private Quaternion _initialRotation;
 
+        private static readonly int Walking = Animator.StringToHash("Walking");
+
+        private bool IsAtTargetPosition => _mover.transform.position == _targetPosition;
+
         private void Awake()
         {
             _mover = GetComponentInParent<Mover>();
+            _animator = transform.parent.GetComponentInChildren<Animator>();
             _targetPosition = null;
         }
 
+        private void PlayMovementAnimation()
+        {
+            _animator.SetBool(Walking, true);
+        }
+
+        private void StopMovementAnimation()
+        {
+            _animator.SetBool(Walking, false);
+        }
+
+        public override void BeforeConsecutiveCommands()
+        {
+            Debug.Log("BeforeConsecutiveCommands");
+            PlayMovementAnimation();
+        }
+
+        public override void AfterConsecutiveCommands()
+        {
+            Debug.Log("AfterConsecutiveCommands");
+            StopMovementAnimation();
+        }
 
         public override void Execute(float deltaTime)
         {
             // compute relative position when execute is called
             if (_targetPosition == null)
             {
+                // PlayMovementAnimation();
                 _targetPosition = GetTargetPosition(direction);
                 Transform t = _mover.transform;
                 _initialPosition = t.position;
@@ -34,6 +62,10 @@ namespace Commands
             }
 
             _mover.MoveTowards(_targetPosition.Value, deltaTime);
+            // if (IsAtTargetPosition)
+            // {
+            //     StopMovementAnimation();
+            // }
         }
 
         public override void Undo()
@@ -45,7 +77,7 @@ namespace Commands
 
         public override bool IsFinished()
         {
-            return _mover.transform.position == _targetPosition;
+            return IsAtTargetPosition;
         }
 
         private Vector3 GetTargetPosition(MoveDirection moveDirection)

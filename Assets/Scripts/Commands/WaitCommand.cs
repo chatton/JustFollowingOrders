@@ -2,6 +2,14 @@ namespace Commands
 {
     public class WaitCommand : Command
     {
+        public override void BeforeConsecutiveCommands()
+        {
+        }
+
+        public override void AfterConsecutiveCommands()
+        {
+        }
+
         public override void Execute(float _)
         {
         }

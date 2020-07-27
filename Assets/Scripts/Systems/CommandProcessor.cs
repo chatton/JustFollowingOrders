@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using Commands;
 using UnityEngine;
@@ -14,13 +15,15 @@ namespace Systems
 
         private IProgrammable[] _programmables;
         private Stack<IEnumerable<Command>> _undoStack;
+        private Dictionary<IProgrammable, Command> _previousCommands;
 
         void Awake()
         {
+            _previousCommands = new Dictionary<IProgrammable, Command>();
             _undoStack = new Stack<IEnumerable<Command>>();
             _programmables = FindObjectsOfType<MonoBehaviour>().OfType<IProgrammable>().ToArray();
             CommandBuffer.Instance.OnAssignCommands +=
-                () => StartCoroutine(CommandProcessor.Instance.ProcessCommands());
+                () => StartCoroutine(Instance.ProcessCommands());
         }
 
         public IEnumerator ProcessCommands()
@@ -55,10 +58,37 @@ namespace Systems
                 }
 
                 Command command = programmable.CurrentCommand();
-                if (command != null)
+
+                bool commandIsNull = command == null;
+
+                if (!commandIsNull)
                 {
+                    if (!_previousCommands.ContainsKey(programmable))
+                    {
+                        // this is the first command
+                        _previousCommands[programmable] = command;
+                    }
+
+                    // command is not the same type as the previously executed one
+                    if (_previousCommands[programmable].GetType() != command.GetType())
+                    {
+                        // end the previous command consecutive chain
+                        _previousCommands[programmable].AfterConsecutiveCommands();
+                    }
+                    else
+                    {
+                        _previousCommands[programmable].BeforeConsecutiveCommands();
+                    }
+
                     command.Execute(Time.deltaTime);
+                    _previousCommands[programmable] = command;
+
                     yield return new WaitForSeconds(Time.deltaTime / commandSpeed);
+
+                    if (programmable.OnLastCommand())
+                    {
+                        command.AfterConsecutiveCommands();
+                    }
                 }
             }
         }

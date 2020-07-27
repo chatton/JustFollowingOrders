@@ -126,6 +126,12 @@ PrefabInstance:
       propertyPath: m_Name
       value: WK_Light_Infantry_B
       objectReference: {fileID: 0}
+    - target: {fileID: 1613250389881438727, guid: 6b09c1ea1d4e30d4280224b592e9dcc6,
+        type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 22100000, guid: 1ae60348ba714412bb94e6d9ac030010,
+        type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6b09c1ea1d4e30d4280224b592e9dcc6, type: 3}
 --- !u!4 &5464775809009271645 stripped
