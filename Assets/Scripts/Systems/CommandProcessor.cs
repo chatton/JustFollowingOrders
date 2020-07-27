@@ -5,6 +5,7 @@ using Commands;
 using UnityEngine;
 using Util;
 using System.Linq;
+using System.Security.Cryptography;
 
 namespace Systems
 {
@@ -80,14 +81,21 @@ namespace Systems
                         _previousCommands[programmable].BeforeConsecutiveCommands();
                     }
 
-                    command.Execute(Time.deltaTime);
-                    _previousCommands[programmable] = command;
-
-                    yield return new WaitForSeconds(Time.deltaTime / commandSpeed);
-
-                    if (programmable.OnLastCommand())
+                    // TODO: remove command or something when it's not possible to perform it. For now just 
+                    // skip over it
+                    if (command.CanPerformCommand())
                     {
-                        command.AfterConsecutiveCommands();
+                        command.Execute(Time.deltaTime);
+                        _previousCommands[programmable] = command;
+                        yield return new WaitForSeconds(Time.deltaTime / commandSpeed);
+                        if (programmable.OnLastCommand())
+                        {
+                            command.AfterConsecutiveCommands();
+                        }
+                    }
+                    else
+                    {
+                        Destroy(command.gameObject);
                     }
                 }
             }

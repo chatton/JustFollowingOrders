@@ -19,22 +19,16 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="094d033a-7ec7-4f79-ac33-33ce141f42e6" name="Default Changelist" comment="Execute function before batches of commands to smooth movement animation">
-      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Commands/AttackCommand.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Commands/AttackCommand.cs.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Core/Attacker.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Core/Attacker.cs.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Core/Health.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.OrdersUp/.idea/contentModel.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.OrdersUp/.idea/contentModel.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.OrdersUp/.idea/indexLayout.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.OrdersUp/.idea/indexLayout.xml" afterDir="false" />
+    <list default="true" id="094d033a-7ec7-4f79-ac33-33ce141f42e6" name="Default Changelist" comment="Added unit attack command prefab">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.OrdersUp/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.OrdersUp/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Animations/InfantryBAnimatorController.overrideController" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Animations/InfantryBAnimatorController.overrideController" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Animations/UnitAnimatorController.controller" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Animations/UnitAnimatorController.controller" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Player.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Prefabs/Player.prefab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scenes/SampleScene.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/SampleScene.unity" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Commands/CommandFactory.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Commands/CommandFactory.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Commands/AttackCommand.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Commands/AttackCommand.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Commands/Command.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Commands/Command.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scripts/Commands/MoveCommand.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Commands/MoveCommand.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UI/ActionButton.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UI/ActionButton.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Commands/RotationCommand.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Commands/RotationCommand.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Commands/WaitCommand.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Commands/WaitCommand.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Core/Health.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Core/Health.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Systems/CommandProcessor.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Systems/CommandProcessor.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -58,6 +52,7 @@
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/Core/Unit.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/Core/Health.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/Commands/RotationDirection.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Prefabs/Commands/AttackCommand.prefab" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/Commands/MoveCommand.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/Commands/RotationCommand.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/Commands/MoveDirection.cs" root0="FORCE_HIGHLIGHTING" />
@@ -83,18 +78,18 @@
         <option value="$PROJECT_DIR$/Assets/Scripts/Systems/CommandBuffer.cs" />
         <option value="$PROJECT_DIR$/Assets/Scripts/Movement/Mover.cs" />
         <option value="$PROJECT_DIR$/Assets/Scripts/Commands/MultiMoveCommand.cs" />
-        <option value="$PROJECT_DIR$/Assets/Scripts/Commands/Command.cs" />
-        <option value="$PROJECT_DIR$/Assets/Scripts/Commands/RotationCommand.cs" />
-        <option value="$PROJECT_DIR$/Assets/Scripts/Commands/WaitCommand.cs" />
         <option value="$PROJECT_DIR$/Assets/Scripts/Commands/IProgrammable.cs" />
         <option value="$PROJECT_DIR$/Assets/Scripts/Core/Unit.cs" />
-        <option value="$PROJECT_DIR$/Assets/Scripts/Systems/CommandProcessor.cs" />
-        <option value="$PROJECT_DIR$/Assets/Scripts/Commands/MoveCommand.cs" />
         <option value="$PROJECT_DIR$/Assets/Scripts/Commands/CommandFactory.cs" />
         <option value="$PROJECT_DIR$/Assets/Scripts/UI/ActionButton.cs" />
         <option value="$PROJECT_DIR$/Assets/Scripts/Core/Attacker.cs" />
-        <option value="$PROJECT_DIR$/Assets/Scripts/Core/Health.cs" />
+        <option value="$PROJECT_DIR$/Assets/Scripts/Commands/Command.cs" />
         <option value="$PROJECT_DIR$/Assets/Scripts/Commands/AttackCommand.cs" />
+        <option value="$PROJECT_DIR$/Assets/Scripts/Commands/MoveCommand.cs" />
+        <option value="$PROJECT_DIR$/Assets/Scripts/Commands/RotationCommand.cs" />
+        <option value="$PROJECT_DIR$/Assets/Scripts/Commands/WaitCommand.cs" />
+        <option value="$PROJECT_DIR$/Assets/Scripts/Systems/CommandProcessor.cs" />
+        <option value="$PROJECT_DIR$/Assets/Scripts/Core/Health.cs" />
       </list>
     </option>
   </component>
@@ -140,7 +135,10 @@
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
     <MESSAGE value="Parallel Command queues working" />
     <MESSAGE value="Execute function before batches of commands to smooth movement animation" />
-    <option name="LAST_COMMIT_MESSAGE" value="Execute function before batches of commands to smooth movement animation" />
+    <MESSAGE value="Added AttackCommand and health component" />
+    <MESSAGE value="Added unity scene changes" />
+    <MESSAGE value="Added unit attack command prefab" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added unit attack command prefab" />
   </component>
   <component name="WindowStateProjectService">
     <state width="1878" height="188" key="GridCell.Tab.0.bottom" timestamp="1595861325012">
@@ -212,21 +210,21 @@
     </state>
     <state x="708" y="233" key="RiderGenerateDialog/0.23.1792.1003@0.23.1792.1003" timestamp="1595798755596" />
     <state x="759" y="225" key="RiderGenerateDialog/0.23.1920.963/1920.23.1920.1057/-1792.23.1792.1097@0.23.1920.963" timestamp="1595859345312" />
-    <state width="534" height="428" key="SwitcherDM" timestamp="1595859675664">
+    <state width="534" height="428" key="SwitcherDM" timestamp="1595863347008">
       <screen x="0" y="23" width="1920" height="963" />
     </state>
     <state width="498" height="445" key="SwitcherDM/0.23.1792.1003@0.23.1792.1003" timestamp="1595794741705" />
-    <state width="534" height="428" key="SwitcherDM/0.23.1920.963/1920.23.1920.1057/-1792.23.1792.1097@0.23.1920.963" timestamp="1595859675664" />
+    <state width="534" height="428" key="SwitcherDM/0.23.1920.963/1920.23.1920.1057/-1792.23.1792.1097@0.23.1920.963" timestamp="1595863347008" />
     <state x="107" y="119" width="1706" height="771" key="VCS.FileHistoryDialog" timestamp="1595859332013">
       <screen x="0" y="23" width="1920" height="963" />
     </state>
     <state x="100" y="123" width="1592" height="803" key="VCS.FileHistoryDialog/0.23.1792.1003@0.23.1792.1003" timestamp="1595795699909" />
     <state x="107" y="119" width="1706" height="771" key="VCS.FileHistoryDialog/0.23.1920.963/1920.23.1920.1057/-1792.23.1792.1097@0.23.1920.963" timestamp="1595859332013" />
-    <state x="531" y="254" key="Vcs.Push.Dialog.v2" timestamp="1595859312984">
+    <state x="531" y="254" key="Vcs.Push.Dialog.v2" timestamp="1595863205562">
       <screen x="0" y="23" width="1920" height="963" />
     </state>
     <state x="496" y="264" key="Vcs.Push.Dialog.v2/0.23.1792.1003@0.23.1792.1003" timestamp="1595799129005" />
-    <state x="531" y="254" key="Vcs.Push.Dialog.v2/0.23.1920.963/1920.23.1920.1057/-1792.23.1792.1097@0.23.1920.963" timestamp="1595859312984" />
+    <state x="531" y="254" key="Vcs.Push.Dialog.v2/0.23.1920.963/1920.23.1920.1057/-1792.23.1792.1097@0.23.1920.963" timestamp="1595863205562" />
     <state x="599" y="233" width="720" height="651" key="search.everywhere.popup" timestamp="1595859445128">
       <screen x="0" y="23" width="1920" height="963" />
     </state>

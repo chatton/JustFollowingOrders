@@ -10,6 +10,11 @@ namespace Commands
         {
         }
 
+        public override bool CanPerformCommand()
+        {
+            return true;
+        }
+
         public override void Execute(float _)
         {
         }

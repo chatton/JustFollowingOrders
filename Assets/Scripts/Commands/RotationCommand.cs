@@ -27,6 +27,11 @@ namespace Commands
         {
         }
 
+        public override bool CanPerformCommand()
+        {
+            return true; // should always be able to rotate
+        }
+
         public override void Execute(float deltaTime)
         {
             if (_startingRotation == null)

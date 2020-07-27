@@ -25,6 +25,11 @@ namespace Commands
         }
 
 
+        public override bool CanPerformCommand()
+        {
+            return _attacker.GetTargetInRange() != null;
+        }
+
         public override void Execute(float timeDelta)
         {
             _elapsedTime += timeDelta;

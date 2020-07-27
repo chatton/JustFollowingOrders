@@ -47,6 +47,11 @@ namespace Commands
             StopMovementAnimation();
         }
 
+        public override bool CanPerformCommand()
+        {
+            return true; // TODO: check if tile is movable!
+        }
+
         public override void Execute(float deltaTime)
         {
             // compute relative position when execute is called
