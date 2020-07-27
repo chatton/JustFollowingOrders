@@ -52,6 +52,7 @@ namespace Commands
         {
             if (_doable == null)
             {
+                // whether or not the move is valid is determined at the first execution.
                 _doable = _mover.CanMoveInDirection(direction);
             }
 

@@ -93,10 +93,12 @@ namespace Systems
                         bool stillCompletingPreviousCommand =
                             !command.IsFinished() && command == _previousCommands[programmable];
 
+                        // make sure to finish any currently executing commands
                         if (stillCompletingPreviousCommand || _priorityCommand == null)
                         {
                             yield return HandleRegularCommand(command, programmable);
                         }
+                        // then jump over to a priority command instead. We should never have more than one.
                         else if (_priorityCommand != null)
                         {
                             yield return HandlePriorityCommand(command);

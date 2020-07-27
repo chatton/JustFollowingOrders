@@ -10,6 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 3661318832697230485}
   - component: {fileID: 5647911700267800618}
+  - component: {fileID: 631856714491557405}
+  - component: {fileID: 1616939537473664162}
   m_Layer: 0
   m_Name: Tile
   m_TagString: Untagged
@@ -44,6 +46,35 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 419d2b466f2014c49b04e7c83a05a585, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!65 &631856714491557405
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3661318832697230484}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 0, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!54 &1616939537473664162
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3661318832697230484}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1001 &6367593422119455058
 PrefabInstance:
   m_ObjectHideFlags: 0
