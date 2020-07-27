@@ -57,18 +57,13 @@ namespace Commands
             // compute relative position when execute is called
             if (_targetPosition == null)
             {
-                // PlayMovementAnimation();
                 _targetPosition = GetTargetPosition(direction);
                 Transform t = _mover.transform;
                 _initialPosition = t.position;
                 _initialRotation = t.rotation;
             }
-
+            Debug.Log("Move::Execute");
             _mover.MoveTowards(_targetPosition.Value, deltaTime);
-            // if (IsAtTargetPosition)
-            // {
-            //     StopMovementAnimation();
-            // }
         }
 
         public override void Undo()

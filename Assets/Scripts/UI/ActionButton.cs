@@ -29,8 +29,13 @@ namespace UI
                     "RotateRight",
                     () => CommandFactory.Instance.CreateRotationCommand(RotationDirection.Right, _mover.transform)
                 },
-                // {"RotateLeft", () => CommandFactory.Instance.CreateRotationCommand(RotationDirection.Left, _mover.transform)}
-                {"RotateLeft", () => CommandFactory.Instance.CreateAttackCommand(_mover.transform)}
+                {
+                    "RotateLeft",
+                    () => CommandFactory.Instance.CreateRotationCommand(RotationDirection.Left, _mover.transform)
+                },
+                {
+                    "Attack", () => CommandFactory.Instance.CreateAttackCommand(_mover.transform)
+                }
             };
         }
 
@@ -39,7 +44,6 @@ namespace UI
 
         public void EnqueueAction(string actionName)
         {
-            Debug.Log(actionName);
             CommandBuffer.Instance.AddCommand(commandFuncs[actionName].Invoke());
         }
     }

@@ -5,7 +5,6 @@ using Commands;
 using UnityEngine;
 using Util;
 using System.Linq;
-using System.Security.Cryptography;
 
 namespace Systems
 {
@@ -17,6 +16,8 @@ namespace Systems
         private IProgrammable[] _programmables;
         private Stack<IEnumerable<Command>> _undoStack;
         private Dictionary<IProgrammable, Command> _previousCommands;
+        private Command _priorityCommand;
+        private float _afterSeconds;
 
         void Awake()
         {
@@ -29,6 +30,7 @@ namespace Systems
 
         public IEnumerator ProcessCommands()
         {
+            // yield return ExecuteImmediateCommands();
             while (!_programmables.All(p => p.HasCompletedAllCommands()))
             {
                 if (_programmables.All(p => !p.HasNextCommand()))
@@ -37,6 +39,9 @@ namespace Systems
                     yield break;
                 }
 
+                // Debug.Log("Before Wait?: " + _paused);
+                // yield return new WaitUntil(() => !_paused);
+                // Debug.Log("After Wait?: " + _paused);
                 yield return ExecuteAllCommands();
 
                 bool allCommandsFinished =
@@ -85,9 +90,19 @@ namespace Systems
                     // skip over it
                     if (command.CanPerformCommand())
                     {
-                        command.Execute(Time.deltaTime);
-                        _previousCommands[programmable] = command;
-                        yield return new WaitForSeconds(Time.deltaTime / commandSpeed);
+                        bool stillCompletingPreviousCommand =
+                            !command.IsFinished() && command == _previousCommands[programmable];
+
+                        if (stillCompletingPreviousCommand || _priorityCommand == null)
+                        {
+                            yield return HandleRegularCommand(command, programmable);
+                        }
+                        else if (_priorityCommand != null)
+                        {
+                            yield return HandlePriorityCommand(command);
+                        }
+
+
                         if (programmable.OnLastCommand())
                         {
                             command.AfterConsecutiveCommands();
@@ -98,6 +113,27 @@ namespace Systems
                         Destroy(command.gameObject);
                     }
                 }
+            }
+        }
+
+        private IEnumerator HandleRegularCommand(Command command, IProgrammable programmable)
+        {
+            command.Execute(Time.deltaTime);
+            _previousCommands[programmable] = command;
+            yield return new WaitForSeconds(Time.deltaTime / commandSpeed);
+        }
+
+        private IEnumerator HandlePriorityCommand(Command currentCommand)
+        {
+            currentCommand.AfterConsecutiveCommands();
+            yield return new WaitForSeconds(_afterSeconds);
+            _afterSeconds = 0;
+            _priorityCommand.Execute(Time.deltaTime);
+            yield return new WaitForSeconds(Time.deltaTime / commandSpeed);
+            if (_priorityCommand.IsFinished())
+            {
+                _undoStack.Push(new List<Command> {_priorityCommand});
+                _priorityCommand = null;
             }
         }
 
@@ -127,6 +163,12 @@ namespace Systems
                     command.Undo();
                 }
             }
+        }
+
+        public void ExecutePriorityCommand(Command command, float afterSeconds)
+        {
+            _afterSeconds = afterSeconds;
+            _priorityCommand = command;
         }
     }
 }

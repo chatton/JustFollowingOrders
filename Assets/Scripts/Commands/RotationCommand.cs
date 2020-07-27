@@ -34,6 +34,7 @@ namespace Commands
 
         public override void Execute(float deltaTime)
         {
+
             if (_startingRotation == null)
             {
                 Quaternion rotation = _mover.transform.rotation;

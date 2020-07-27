@@ -3,10 +3,11 @@ using System.Linq;
 using Commands;
 using UnityEngine;
 
-namespace Core
+namespace Enemies
 {
-    public class Unit : MonoBehaviour, IProgrammable
+    public class Enemy : MonoBehaviour, IProgrammable
     {
+        public Command ImmediateCommand { get; set; }
         private List<Command> _commands;
         private int _commandIndex;
 
@@ -15,7 +16,6 @@ namespace Core
             _commands = GetComponentsInChildren<Command>().ToList();
         }
 
-        public Command ImmediateCommand { get; set; }
 
         public void MoveOntoNextCommand()
         {
@@ -46,11 +46,6 @@ namespace Core
         public bool HasCompletedAllCommands()
         {
             return OnLastCommand() && CurrentCommand().IsFinished();
-        }
-
-        public void AssignCommands(IEnumerable<Command> commands)
-        {
-            _commands = new List<Command>(commands);
         }
     }
 }

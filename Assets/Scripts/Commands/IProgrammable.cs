@@ -8,7 +8,6 @@ namespace Commands
 
         bool OnLastCommand();
 
-
         bool HasCompletedAllCommands();
         // void AddCommand(Command command);
     }
