@@ -14,9 +14,10 @@ GameObject:
   - component: {fileID: 6139821661526493168}
   - component: {fileID: 667778606487265288}
   - component: {fileID: 622929131710758068}
+  - component: {fileID: 7576998979576523828}
   m_Layer: 0
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -100,6 +101,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   attackPointOrigin: {fileID: 808527564762166197}
+  attackRange: 1
+--- !u!54 &7576998979576523828
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1730598661361119523}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1 &3330363626894186596
 GameObject:
   m_ObjectHideFlags: 0
