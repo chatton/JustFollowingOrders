@@ -15,6 +15,7 @@ namespace Commands
         private Vector3? _targetPosition;
         private Vector3 _initialPosition;
         private Quaternion _initialRotation;
+        private bool? _doable;
 
         private static readonly int Walking = Animator.StringToHash("Walking");
 
@@ -49,7 +50,12 @@ namespace Commands
 
         public override bool CanPerformCommand()
         {
-            return true; // TODO: check if tile is movable!
+            if (_doable == null)
+            {
+                _doable = _mover.CanMoveInDirection(direction);
+            }
+
+            return _doable.Value;
         }
 
         public override void Execute(float deltaTime)
@@ -62,7 +68,7 @@ namespace Commands
                 _initialPosition = t.position;
                 _initialRotation = t.rotation;
             }
-            Debug.Log("Move::Execute");
+
             _mover.MoveTowards(_targetPosition.Value, deltaTime);
         }
 

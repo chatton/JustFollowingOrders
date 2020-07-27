@@ -110,6 +110,7 @@ namespace Systems
                     }
                     else
                     {
+                        command.AfterConsecutiveCommands();
                         Destroy(command.gameObject);
                     }
                 }

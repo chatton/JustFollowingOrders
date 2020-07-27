@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections;
-using System.Linq;
-using Systems;
+﻿using Systems;
 using Commands;
-using Core;
 using UnityEngine;
 
 namespace Enemies
@@ -17,6 +13,7 @@ namespace Enemies
                 return;
             }
 
+            // Attack if the player is in range
             Attack();
         }
 

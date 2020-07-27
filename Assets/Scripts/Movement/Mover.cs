@@ -1,5 +1,7 @@
 ﻿using System;
+using Commands;
 using UnityEngine;
+using World;
 
 namespace Movement
 {
@@ -7,6 +9,7 @@ namespace Movement
     {
         [SerializeField] private float moveSpeed = 1f;
         [SerializeField] private float rotateSpeed = 100f;
+        [SerializeField] private Transform groundPoint;
 
         public event Action OnMove;
         public event Action OnStop;
@@ -21,7 +24,7 @@ namespace Movement
                 OnStop?.Invoke();
                 return;
             }
-            
+
             OnMove?.Invoke();
 
             Vector3 newPosition = Vector3.MoveTowards(currentPosition, targetPosition, deltaTme * moveSpeed);
@@ -40,6 +43,37 @@ namespace Movement
             Quaternion targetRotation = Quaternion.RotateTowards(transform.rotation, Quaternion.Euler(0, yAxisAngle, 0),
                 rotateSpeed * deltaTime);
             transform.rotation = targetRotation;
+        }
+
+        public bool CanMoveInDirection(MoveDirection direction)
+        {
+            Vector3 startingPosition;
+            switch (direction)
+            {
+                case MoveDirection.Forward:
+                    startingPosition = transform.position + Vector3.forward;
+                    break;
+                case MoveDirection.Left:
+                    startingPosition = transform.position + Vector3.left;
+                    break;
+                case MoveDirection.Right:
+                    startingPosition = transform.position + Vector3.right;
+                    break;
+                case MoveDirection.Back:
+                    startingPosition = transform.position + Vector3.back;
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(direction), direction, "Unknown direction!");
+            }
+
+            // shoot a raycast down to see if there is a tile that we can walk on
+            if (Physics.Raycast(startingPosition + Vector3.up * 2, Vector3.down, out RaycastHit hit, 5f))
+            {
+                Tile t = hit.collider.gameObject.GetComponent<Tile>();
+                return t != null;
+            }
+
+            return false;
         }
     }
 }
