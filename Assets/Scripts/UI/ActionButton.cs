@@ -15,12 +15,22 @@ namespace UI
         {
             commandFuncs = new Dictionary<string, Func<Command>>
             {
-                {"MoveForward", () => CommandFactory.Instance.CreateMovementCommand(MoveDirection.Forward, _mover.transform)},
+                {
+                    "MoveForward",
+                    () => CommandFactory.Instance.CreateMovementCommand(MoveDirection.Forward, _mover.transform)
+                },
                 {"MoveBack", () => CommandFactory.Instance.CreateMovementCommand(MoveDirection.Back, _mover.transform)},
                 {"MoveLeft", () => CommandFactory.Instance.CreateMovementCommand(MoveDirection.Left, _mover.transform)},
-                {"MoveRight", () => CommandFactory.Instance.CreateMovementCommand(MoveDirection.Right, _mover.transform)},
-                {"RotateRight", () => CommandFactory.Instance.CreateRotationCommand(RotationDirection.Right, _mover.transform)},
-                {"RotateLeft", () => CommandFactory.Instance.CreateRotationCommand(RotationDirection.Left, _mover.transform)}
+                {
+                    "MoveRight",
+                    () => CommandFactory.Instance.CreateMovementCommand(MoveDirection.Right, _mover.transform)
+                },
+                {
+                    "RotateRight",
+                    () => CommandFactory.Instance.CreateRotationCommand(RotationDirection.Right, _mover.transform)
+                },
+                // {"RotateLeft", () => CommandFactory.Instance.CreateRotationCommand(RotationDirection.Left, _mover.transform)}
+                {"RotateLeft", () => CommandFactory.Instance.CreateAttackCommand(_mover.transform)}
             };
         }
 

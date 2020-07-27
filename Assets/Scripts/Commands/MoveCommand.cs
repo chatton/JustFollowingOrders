@@ -39,13 +39,11 @@ namespace Commands
 
         public override void BeforeConsecutiveCommands()
         {
-            Debug.Log("BeforeConsecutiveCommands");
             PlayMovementAnimation();
         }
 
         public override void AfterConsecutiveCommands()
         {
-            Debug.Log("AfterConsecutiveCommands");
             StopMovementAnimation();
         }
 

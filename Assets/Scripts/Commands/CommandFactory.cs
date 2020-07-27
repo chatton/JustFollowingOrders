@@ -11,6 +11,7 @@ namespace Commands
     {
         [SerializeField] private MoveCommand moveCommandPrefab;
         [SerializeField] private RotationCommand rotateCommandPrefab;
+        [SerializeField] private AttackCommand attackCommandPrefab;
 
         public Command CreateMovementCommand(MoveDirection direction, Transform parent)
         {
@@ -28,38 +29,12 @@ namespace Commands
             return command;
         }
 
-        // public List<Command> CondenseMoveCommands(Command[] commands)
-        // {
-        //     List<Command> condensed = new List<Command>();
-        //     List<MoveCommand> moveCommands = new List<MoveCommand>();
-        //     foreach (Command command in commands)
-        //     {
-        //         if (!(command is MoveCommand))
-        //         {
-        //             if (moveCommands.Count != 0)
-        //             {
-        //                 // create our condensed move command!
-        //
-        //                 moveCommands.Clear();
-        //             }
-        //
-        //             // regular command, nothing to condense!
-        //             condensed.Add(command);
-        //             continue;
-        //         }
-        //
-        //         MoveCommand moveCommand = command as MoveCommand;
-        //         moveCommands.Add(moveCommand);
-        //     }
-        //
-        //     if (moveCommands.Count != 0)
-        //     {
-        //         // create our condensed move command!
-        //
-        //         moveCommands.Clear();
-        //     }
-        //
-        //     return condensed;
-        // }
+        public Command CreateAttackCommand(Transform parent)
+        {
+            AttackCommand command =
+                Instantiate(attackCommandPrefab, parent.transform.position, Quaternion.identity, parent);
+            // command.direction = direction;
+            return command;
+        }
     }
 }
