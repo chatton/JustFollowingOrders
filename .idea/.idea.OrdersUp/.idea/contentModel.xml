@@ -50,8 +50,10 @@
         </e>
         <e p="Scripts" t="Include">
           <e p="Commands" t="Include">
-            <e p="ICommand.cs" t="Include" />
-            <e p="ICommandAssignable.cs" t="Include" />
+            <e p="AttackCommand.cs" t="Include" />
+            <e p="Command.cs" t="Include" />
+            <e p="CommandFactory.cs" t="Include" />
+            <e p="CommandType.cs" t="Include" />
             <e p="IProgrammable.cs" t="Include" />
             <e p="MoveCommand.cs" t="Include" />
             <e p="MoveDirection.cs" t="Include" />
@@ -60,6 +62,8 @@
             <e p="WaitCommand.cs" t="Include" />
           </e>
           <e p="Core" t="Include">
+            <e p="Attacker.cs" t="Include" />
+            <e p="Health.cs" t="Include" />
             <e p="Unit.cs" t="Include" />
           </e>
           <e p="Movement" t="Include">
