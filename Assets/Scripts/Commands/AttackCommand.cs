@@ -27,15 +27,22 @@ namespace Commands
 
         public override bool CanPerformCommand()
         {
+            // if (_attacker.GetComponent<Health>().IsDead)
+            // {
+            //     return false;
+            // }
+
             return _attacker.GetTargetInRange() != null;
         }
 
         public override void Execute(float timeDelta)
         {
             _elapsedTime += timeDelta;
-            if (!_finishedAttackAnimation && _elapsedTime >= _animator.GetCurrentAnimatorStateInfo(0).length)
+            // if (!_finishedAttackAnimation && _elapsedTime >= _animator.GetCurrentAnimatorStateInfo(0).length)
+            if (!_finishedAttackAnimation && _elapsedTime >= 0.5f)
             {
                 _finishedAttackAnimation = true;
+                Debug.Log("Setting value to false!");
                 _animator.SetBool(Attack, false);
                 return;
             }
@@ -45,6 +52,7 @@ namespace Commands
                 return;
             }
 
+            Debug.Log(gameObject.transform.parent.name + " is performing the AttackCommand");
             _hasAttacked = true;
             _animator.SetBool(Attack, true);
             _health = _attacker.GetTargetInRange();

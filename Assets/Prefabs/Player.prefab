@@ -49,8 +49,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 64888584a1d6046998fc6084095d9bc2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 1
-  rotateSpeed: 1
+  moveSpeed: 1.5
+  rotateSpeed: 200
   groundPoint: {fileID: 3080572015060057031}
 --- !u!114 &1423639130247645031
 MonoBehaviour:

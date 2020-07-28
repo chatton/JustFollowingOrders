@@ -12,6 +12,7 @@ namespace Core
         public event Action OnDeath;
 
         private Animator _animator;
+        public bool IsDead { get; set; }
 
 
         private void Awake()
@@ -21,6 +22,7 @@ namespace Core
 
         public void Hit()
         {
+            IsDead = true;
             StartCoroutine(Die());
         }
 

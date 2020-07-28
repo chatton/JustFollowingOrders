@@ -14,6 +14,8 @@ namespace Movement
         public event Action OnMove;
         public event Action OnStop;
 
+        public event Action OnRotationStart;
+        public event Action OnRotationEnd;
 
         public void MoveTowards(Vector3 targetPosition, float deltaTme)
         {
@@ -42,31 +44,47 @@ namespace Movement
         {
             Quaternion targetRotation = Quaternion.RotateTowards(transform.rotation, Quaternion.Euler(0, yAxisAngle, 0),
                 rotateSpeed * deltaTime);
+
             transform.rotation = targetRotation;
         }
 
 
-        // private void OnDrawGizmosSelected()
-        // {
-        //     Gizmos.color = Color.red;
-        //     Gizmos.DrawLine(StartPosition(MoveDirection.Right) + transform.up * 2f, -transform.up);
-        //     Gizmos.DrawLine(StartPosition(MoveDirection.Left) + transform.up * 2f, -transform.up);
-        //     Gizmos.DrawLine(StartPosition(MoveDirection.Back) + transform.up * 2f, -transform.up);
-        //     Gizmos.DrawLine(StartPosition(MoveDirection.Forward) + transform.up * 2f, -transform.up);
-        // }
+        private void OnDrawGizmosSelected()
+        {
+            Gizmos.color = Color.red;
+            Gizmos.DrawLine(StartPosition(MoveDirection.Right) + transform.up * 2f,
+                StartPosition(MoveDirection.Right) - Vector3.down);
+            Gizmos.DrawLine(StartPosition(MoveDirection.Left) + transform.up * 2f,
+                StartPosition(MoveDirection.Left) - Vector3.down);
+            Gizmos.DrawLine(StartPosition(MoveDirection.Back) + transform.up * 2f,
+                StartPosition(MoveDirection.Back) - Vector3.down);
+            Gizmos.DrawLine(StartPosition(MoveDirection.Forward) + transform.up * 2f,
+                StartPosition(MoveDirection.Forward) - Vector3.down);
+        }
 
         private Vector3 StartPosition(MoveDirection direction)
         {
             switch (direction)
             {
+                // case MoveDirection.Forward:
+                //     return transform.position + transform.forward;
+                // case MoveDirection.Left:
+                //     return transform.position + -transform.right;
+                // case MoveDirection.Right:
+                //     return transform.position + transform.right;
+                // case MoveDirection.Back:
+                //     return transform.position + -transform.forward;
+                // default:
+                //     throw new ArgumentOutOfRangeException(nameof(direction), direction, "Unknown direction!");
+
                 case MoveDirection.Forward:
-                    return transform.localPosition + transform.forward;
+                    return transform.position + Vector3.forward;
                 case MoveDirection.Left:
-                    return transform.localPosition + -transform.right;
+                    return transform.position + Vector3.left;
                 case MoveDirection.Right:
-                    return transform.localPosition + transform.right;
+                    return transform.position + Vector3.right;
                 case MoveDirection.Back:
-                    return transform.localPosition + -transform.forward;
+                    return transform.position + Vector3.back;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(direction), direction, "Unknown direction!");
             }
@@ -79,10 +97,14 @@ namespace Movement
             // shoot a raycast down to see if there is a tile that we can walk on
             if (Physics.Raycast(startingPosition + transform.up * 2, -transform.up, out RaycastHit hit, 100f))
             {
+                // a key will always be on a walkable tile
+                if (hit.collider.CompareTag("Key") || hit.collider.CompareTag("Chest"))
+                {
+                    return true;
+                }
+
                 Tile t = hit.collider.gameObject.GetComponent<Tile>();
 
-                Debug.Log(hit.point);
-                Debug.Log(t.name);
                 return t != null;
             }
 

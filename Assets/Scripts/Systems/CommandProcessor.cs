@@ -28,7 +28,7 @@ namespace Systems
                 () => StartCoroutine(Instance.ProcessCommands());
         }
 
-        public IEnumerator ProcessCommands()
+        private IEnumerator ProcessCommands()
         {
             // yield return ExecuteImmediateCommands();
             while (!_programmables.All(p => p.HasCompletedAllCommands()))
@@ -39,9 +39,6 @@ namespace Systems
                     yield break;
                 }
 
-                // Debug.Log("Before Wait?: " + _paused);
-                // yield return new WaitUntil(() => !_paused);
-                // Debug.Log("After Wait?: " + _paused);
                 yield return ExecuteAllCommands();
 
                 bool allCommandsFinished =
@@ -60,16 +57,10 @@ namespace Systems
             {
                 if (!programmable.HasNextCommand())
                 {
-                    // if (_priorityCommand != null)
-                    // {
-                    //     yield return HandlePriorityCommand(null);
-                    // }
-
                     continue;
                 }
 
                 Command command = programmable.CurrentCommand();
-
                 bool commandIsNull = command == null;
 
                 if (!commandIsNull)

@@ -7,7 +7,6 @@ namespace Enemies
 {
     public class Enemy : MonoBehaviour, IProgrammable
     {
-        public Command ImmediateCommand { get; set; }
         private List<Command> _commands;
         private int _commandIndex;
 
@@ -20,6 +19,10 @@ namespace Enemies
         public void MoveOntoNextCommand()
         {
             _commandIndex++;
+            if (_commandIndex == _commands.Count)
+            {
+                _commandIndex = 0;
+            }
         }
 
         public Command CurrentCommand()
@@ -34,18 +37,19 @@ namespace Enemies
 
         public bool HasNextCommand()
         {
-            return _commandIndex < _commands.Count;
+            return _commands.Count > 0;
         }
 
         public bool OnLastCommand()
         {
-            return _commandIndex == _commands.Count - 1;
+            return false;
         }
 
 
         public bool HasCompletedAllCommands()
         {
-            return OnLastCommand() && CurrentCommand().IsFinished();
+            // we have never finished all commands if we have any, we want to cycle through them
+            return _commands.Count == 0;
         }
     }
 }

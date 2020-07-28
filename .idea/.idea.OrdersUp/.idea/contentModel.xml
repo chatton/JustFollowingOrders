@@ -63,7 +63,9 @@
           </e>
           <e p="Core" t="Include">
             <e p="Attacker.cs" t="Include" />
+            <e p="Chest.cs" t="Include" />
             <e p="Health.cs" t="Include" />
+            <e p="Key.cs" t="Include" />
             <e p="Unit.cs" t="Include" />
           </e>
           <e p="Enemies" t="Include">
@@ -76,6 +78,7 @@
           <e p="Systems" t="Include">
             <e p="CommandBuffer.cs" t="Include" />
             <e p="CommandProcessor.cs" t="Include" />
+            <e p="LevelManager.cs" t="Include" />
             <e p="MouseController.cs" t="Include" />
           </e>
           <e p="UI" t="Include">

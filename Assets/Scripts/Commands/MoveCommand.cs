@@ -50,11 +50,11 @@ namespace Commands
 
         public override bool CanPerformCommand()
         {
+        
             if (_doable == null)
             {
                 // whether or not the move is valid is determined at the first execution.
                 _doable = _mover.CanMoveInDirection(direction);
-                Debug.Log(_doable.Value);
             }
 
             return _doable.Value;
