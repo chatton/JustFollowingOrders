@@ -19,6 +19,11 @@ namespace Commands
             _mover = GetComponentInParent<Mover>();
         }
 
+        public override string ToString()
+        {
+            return "Rotate " + direction;
+        }
+
         public override void BeforeConsecutiveCommands()
         {
         }

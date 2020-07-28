@@ -60,6 +60,11 @@ namespace Commands
             return _doable.Value;
         }
 
+        public override string ToString()
+        {
+            return direction.ToString();
+        }
+
         public override void Execute(float deltaTime)
         {
             // compute relative position when execute is called

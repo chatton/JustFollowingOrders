@@ -8,27 +8,35 @@ using Util;
 
 namespace Systems
 {
-    public class CommandBuffer : Singleton<CommandBuffer>
+    public class CommandBuffer : MonoBehaviour
     {
-        [SerializeField] private Unit unit;
+        private Unit _unit;
 
-        public event Action OnAssignCommands;
         private List<Command> _commands;
+
+        public List<Command> Commands => _commands;
 
         private void Awake()
         {
+            _unit = GetComponent<Unit>();
             _commands = new List<Command>();
         }
 
         public void AddCommand(Command command)
         {
             _commands.Add(command);
+            AssignCommands();
         }
 
         public void AssignCommands()
         {
-            unit.AssignCommands(_commands);
-            OnAssignCommands?.Invoke();
+            _unit.AssignCommands(_commands);
+        }
+
+        public void RemoveCommand()
+        {
+            _commands.RemoveAt(_commands.Count - 1);
+            AssignCommands();
         }
     }
 }

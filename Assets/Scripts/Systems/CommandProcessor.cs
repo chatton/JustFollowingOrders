@@ -18,14 +18,27 @@ namespace Systems
         private Dictionary<IProgrammable, Command> _previousCommands;
         private Command _priorityCommand;
         private float _afterSeconds;
+        private Coroutine _coroutine;
 
         void Awake()
         {
             _previousCommands = new Dictionary<IProgrammable, Command>();
             _undoStack = new Stack<IEnumerable<Command>>();
             _programmables = FindObjectsOfType<MonoBehaviour>().OfType<IProgrammable>().ToArray();
-            CommandBuffer.Instance.OnAssignCommands +=
-                () => StartCoroutine(Instance.ProcessCommands());
+            // CommandBuffer.Instance.OnAssignCommands +=
+            // () => StartCoroutine(Instance.ProcessCommands());
+        }
+
+        public void DoCommandProcessing()
+        {
+            if (_coroutine == null)
+            {
+                _coroutine = StartCoroutine(ProcessCommands());
+            }
+            else
+            {
+                Debug.Log("Tried to call DoCommandProcessing when there was already a coroutine running!");
+            }
         }
 
         private IEnumerator ProcessCommands()

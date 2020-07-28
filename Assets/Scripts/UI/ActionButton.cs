@@ -9,42 +9,48 @@ namespace UI
 {
     public class ActionButton : MonoBehaviour
     {
-        private Dictionary<string, Func<Command>> commandFuncs;
+        private Dictionary<string, Func<Transform, Command>> commandFuncs;
 
         private void Awake()
         {
-            commandFuncs = new Dictionary<string, Func<Command>>
+            commandFuncs = new Dictionary<string, Func<Transform, Command>>
             {
                 {
                     "MoveForward",
-                    () => CommandFactory.Instance.CreateMovementCommand(MoveDirection.Forward, _mover.transform)
+                    t => CommandFactory.Instance.CreateMovementCommand(MoveDirection.Forward, t)
                 },
-                {"MoveBack", () => CommandFactory.Instance.CreateMovementCommand(MoveDirection.Back, _mover.transform)},
-                {"MoveLeft", () => CommandFactory.Instance.CreateMovementCommand(MoveDirection.Left, _mover.transform)},
+                {"MoveBack", t => CommandFactory.Instance.CreateMovementCommand(MoveDirection.Back, t)},
+                {"MoveLeft", t => CommandFactory.Instance.CreateMovementCommand(MoveDirection.Left, t)},
                 {
                     "MoveRight",
-                    () => CommandFactory.Instance.CreateMovementCommand(MoveDirection.Right, _mover.transform)
+                    t => CommandFactory.Instance.CreateMovementCommand(MoveDirection.Right, t)
                 },
                 {
                     "RotateRight",
-                    () => CommandFactory.Instance.CreateRotationCommand(RotationDirection.Right, _mover.transform)
+                    t => CommandFactory.Instance.CreateRotationCommand(RotationDirection.Right, t)
                 },
                 {
                     "RotateLeft",
-                    () => CommandFactory.Instance.CreateRotationCommand(RotationDirection.Left, _mover.transform)
+                    t => CommandFactory.Instance.CreateRotationCommand(RotationDirection.Left, t)
                 },
                 {
-                    "Attack", () => CommandFactory.Instance.CreateAttackCommand(_mover.transform)
+                    "Attack", t => CommandFactory.Instance.CreateAttackCommand(t)
                 }
             };
         }
 
-        [SerializeField] private Mover _mover;
-
 
         public void EnqueueAction(string actionName)
         {
-            CommandBuffer.Instance.AddCommand(commandFuncs[actionName].Invoke());
+            LevelManager lm = LevelManager.Instance;
+            if (lm.SelectedCommandBuffer == null)
+            {
+                Debug.Log("There was no selected command buffer!");
+                return;
+            }
+
+            lm.AddCommand(commandFuncs[actionName].Invoke(lm.SelectedCommandBuffer.transform));
         }
+        
     }
 }

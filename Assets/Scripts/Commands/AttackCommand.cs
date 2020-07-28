@@ -24,6 +24,10 @@ namespace Commands
             _attacker = GetComponentInParent<Attacker>();
         }
 
+        public override string ToString()
+        {
+            return "Attack!";
+        }
 
         public override bool CanPerformCommand()
         {
