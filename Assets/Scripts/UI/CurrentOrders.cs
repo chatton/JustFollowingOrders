@@ -22,7 +22,7 @@ namespace UI
         private void HandleSkippedCommand(Command skippedCommand)
         {
             Debug.Log("Skipped the command: " + skippedCommand);
-        }    
+        }
 
         private string BuildCommandString(Command[] commands)
         {
@@ -54,9 +54,18 @@ namespace UI
             }
 
             StringBuilder sb = new StringBuilder();
+            if (commandsByType.Count == 0)
+            {
+                return "";
+            }
 
             foreach (List<Command> commandList in commandsByType)
             {
+                if (commandList.Count == 0)
+                {
+                    continue;
+                }
+
                 if (commandList.Count == 1)
                 {
                     sb.AppendLine(commandList[0].ToString());
