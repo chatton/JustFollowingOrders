@@ -12,6 +12,7 @@ namespace Systems
     {
         [SerializeField] private float commandSpeed = 5f;
         public bool IsProcessingCommands => false;
+        public event Action OnBeginCommandProcessing;
 
         private IProgrammable[] _programmables;
         private Stack<IEnumerable<Command>> _undoStack;
@@ -33,6 +34,7 @@ namespace Systems
         {
             if (_coroutine == null)
             {
+                OnBeginCommandProcessing?.Invoke();
                 _coroutine = StartCoroutine(ProcessCommands());
             }
             else
