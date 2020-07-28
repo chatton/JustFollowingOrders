@@ -20,12 +20,21 @@ namespace Systems
         private Command _priorityCommand;
         private float _afterSeconds;
         private Coroutine _coroutine;
+        private List<Command> _priorityCommands;
+
+
+        private bool AllProgrammablesHaveCompletedAllCommands => _programmables.All(p => p.HasCompletedAllCommands());
+        private bool AllPriorityCommandsAreFinished => _priorityCommands.All(p => p.IsFinished());
+
+        private bool AllCommandsAreFinished =>
+            _programmables.All(p => p.CurrentCommand() == null || p.CurrentCommand().IsFinished());
 
         void Awake()
         {
             _previousCommands = new Dictionary<IProgrammable, Command>();
             _undoStack = new Stack<IEnumerable<Command>>();
             _programmables = FindObjectsOfType<MonoBehaviour>().OfType<IProgrammable>().ToArray();
+            _priorityCommands = new List<Command>();
             // CommandBuffer.Instance.OnAssignCommands +=
             // () => StartCoroutine(Instance.ProcessCommands());
         }
@@ -43,9 +52,60 @@ namespace Systems
             }
         }
 
+        private bool _shouldProcessCommands;
+
+        public void StartProcessingCommands()
+        {
+            _shouldProcessCommands = true;
+        }
+
+        private bool ThereAreCommandsToProcess()
+        {
+            return _shouldProcessCommands && _programmables.Any(p => !p.HasCompletedAllCommands());
+        }
+
+        private void Update()
+        {
+            if (!ThereAreCommandsToProcess())
+            {
+                return;
+            }
+
+            foreach (IProgrammable programmable in _programmables)
+            {
+                if (!programmable.HasNextCommand())
+                {
+                    continue;
+                }
+
+                Command command = programmable.CurrentCommand();
+                command.Execute(Time.deltaTime);
+            }
+
+            if (AllCommandsAreFinished)
+            {
+                // we perform all priority commands before we move onto the next round of commands
+                foreach (Command command in _priorityCommands)
+                {
+                    command.Execute(Time.deltaTime);
+                }
+
+                if (AllPriorityCommandsAreFinished)
+                {
+                    _priorityCommands.Clear();
+                    ProgressToNextCommands();
+                }
+            }
+
+            if (AllProgrammablesHaveCompletedAllCommands)
+            {
+                _shouldProcessCommands = false;
+            }
+        }
+
+
         private IEnumerator ProcessCommands()
         {
-            // yield return ExecuteImmediateCommands();
             while (!_programmables.All(p => p.HasCompletedAllCommands()))
             {
                 if (_programmables.All(p => !p.HasNextCommand()))
@@ -183,10 +243,15 @@ namespace Systems
             }
         }
 
+        // public void ExecutePriorityCommand(Command command, float afterSeconds)
+        // {
+        //     _afterSeconds = afterSeconds;
+        //     _priorityCommand = command;
+        // }
+
         public void ExecutePriorityCommand(Command command, float afterSeconds)
         {
-            _afterSeconds = afterSeconds;
-            _priorityCommand = command;
+            _priorityCommands.Add(command);
         }
     }
 }

@@ -2663,8 +2663,8 @@ Camera:
   m_GameObject: {fileID: 963194225}
   m_Enabled: 1
   serializedVersion: 2
-  m_ClearFlags: 1
-  m_BackGroundColor: {r: 0, g: 0.38888884, b: 1, a: 0}
+  m_ClearFlags: 2
+  m_BackGroundColor: {r: 0.048460316, g: 0.31132078, b: 0.3079054, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
@@ -6386,6 +6386,11 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 157075697}
+    - target: {fileID: 2800925031856597459, guid: 548d8dc8a8492422d855b6a43216090e,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: StartProcessingCommands
+      objectReference: {fileID: 0}
     - target: {fileID: 2800925031856597470, guid: 548d8dc8a8492422d855b6a43216090e,
         type: 3}
       propertyPath: m_IsActive

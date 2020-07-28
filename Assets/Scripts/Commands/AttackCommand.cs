@@ -17,6 +17,7 @@ namespace Commands
         private float _clipLength;
         private float _elapsedTime;
         private bool _finishedAttackAnimation;
+        private bool _attackerDead;
 
         private void Awake()
         {
@@ -31,10 +32,10 @@ namespace Commands
 
         public override bool CanPerformCommand()
         {
-            // if (_attacker.GetComponent<Health>().IsDead)
-            // {
-            //     return false;
-            // }
+            if (_attacker.GetComponent<Health>().IsDead)
+            {
+                return false;
+            }
 
             return _attacker.GetTargetInRange() != null;
         }
@@ -53,6 +54,12 @@ namespace Commands
 
             if (_hasAttacked)
             {
+                return;
+            }
+
+            if (_attacker.GetComponent<Health>().IsDead)
+            {
+                _attackerDead = true;
                 return;
             }
 
@@ -77,7 +84,7 @@ namespace Commands
 
         public override bool IsFinished()
         {
-            return _enemyDead && _finishedAttackAnimation;
+            return _attackerDead || (_enemyDead && _finishedAttackAnimation);
         }
 
         #region EmptyOverrides

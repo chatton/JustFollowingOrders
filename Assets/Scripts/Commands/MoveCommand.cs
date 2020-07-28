@@ -1,8 +1,6 @@
 using System;
-using System.Collections.Generic;
 using Movement;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace Commands
 {
@@ -16,26 +14,30 @@ namespace Commands
         private Vector3 _initialPosition;
         private Quaternion _initialRotation;
         private bool? _doable;
+        private Vector3 _oldPos;
 
-        private static readonly int Walking = Animator.StringToHash("Walking");
+        // private static readonly int Walking = Animator.StringToHash("Walking");
+        private static readonly int Speed = Animator.StringToHash("Speed");
 
         private bool IsAtTargetPosition => _mover.transform.position == _targetPosition;
 
         private void Awake()
         {
             _mover = GetComponentInParent<Mover>();
+
             _animator = transform.parent.GetComponentInChildren<Animator>();
             _targetPosition = null;
+            // _mover.OnStop += () => { _animator.SetFloat(Speed, 0f); };
         }
 
         private void PlayMovementAnimation()
         {
-            _animator.SetBool(Walking, true);
+            // _animator.SetBool(Walking, true);
         }
 
         private void StopMovementAnimation()
         {
-            _animator.SetBool(Walking, false);
+            // _animator.SetBool(Walking, false);
         }
 
         public override void BeforeConsecutiveCommands()
@@ -50,7 +52,6 @@ namespace Commands
 
         public override bool CanPerformCommand()
         {
-        
             if (_doable == null)
             {
                 // whether or not the move is valid is determined at the first execution.
@@ -75,6 +76,27 @@ namespace Commands
                 _initialPosition = t.position;
                 _initialRotation = t.rotation;
             }
+
+            // float speedPerSec = Vector3.Distance(_oldPos, transform.parent.position) / deltaTime;
+            // float speed = Vector3.Distance(_oldPos, transform.parent.position) / deltaTime;
+            // Debug.Log(speed);
+            // _oldPos = transform.parent.position;
+
+            // if (_targetPosition == transform.position)
+            // {
+            //     Debug.Log("HERE!");
+            //     _animator.SetFloat(Speed, 0f);
+            // }
+            // else
+            // {
+            _animator.SetFloat(Speed, 1f);
+            // }
+
+
+            // if (IsAtTargetPosition)
+            // {
+            //     _animator.SetFloat(Speed, 0f);
+            // }
 
             _mover.MoveTowards(_targetPosition.Value, deltaTime);
         }
