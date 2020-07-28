@@ -52,13 +52,22 @@ namespace Movement
         private void OnDrawGizmosSelected()
         {
             Gizmos.color = Color.red;
-            Gizmos.DrawLine(StartPosition(MoveDirection.Right) + transform.up * 2f,
+            // Gizmos.DrawLine(StartPosition(MoveDirection.Right) + transform.up * 2f,
+            //     StartPosition(MoveDirection.Right) - Vector3.down);
+            // Gizmos.DrawLine(StartPosition(MoveDirection.Left) + transform.up * 2f,
+            //     StartPosition(MoveDirection.Left) - Vector3.down);
+            // Gizmos.DrawLine(StartPosition(MoveDirection.Back) + transform.up * 2f,
+            //     StartPosition(MoveDirection.Back) - Vector3.down);
+            // Gizmos.DrawLine(StartPosition(MoveDirection.Forward) + transform.up * 2f,
+            //     StartPosition(MoveDirection.Forward) - Vector3.down);
+            
+            Gizmos.DrawLine(StartPosition(MoveDirection.Right) + Vector3.up * 2f,
                 StartPosition(MoveDirection.Right) - Vector3.down);
-            Gizmos.DrawLine(StartPosition(MoveDirection.Left) + transform.up * 2f,
+            Gizmos.DrawLine(StartPosition(MoveDirection.Left) + Vector3.up * 2f,
                 StartPosition(MoveDirection.Left) - Vector3.down);
-            Gizmos.DrawLine(StartPosition(MoveDirection.Back) + transform.up * 2f,
+            Gizmos.DrawLine(StartPosition(MoveDirection.Back) + Vector3.up * 2f,
                 StartPosition(MoveDirection.Back) - Vector3.down);
-            Gizmos.DrawLine(StartPosition(MoveDirection.Forward) + transform.up * 2f,
+            Gizmos.DrawLine(StartPosition(MoveDirection.Forward) + Vector3.up * 2f,
                 StartPosition(MoveDirection.Forward) - Vector3.down);
         }
 
@@ -66,34 +75,34 @@ namespace Movement
         {
             switch (direction)
             {
-                // case MoveDirection.Forward:
-                //     return transform.position + transform.forward;
-                // case MoveDirection.Left:
-                //     return transform.position + -transform.right;
-                // case MoveDirection.Right:
-                //     return transform.position + transform.right;
-                // case MoveDirection.Back:
-                //     return transform.position + -transform.forward;
-                // default:
-                //     throw new ArgumentOutOfRangeException(nameof(direction), direction, "Unknown direction!");
-
                 case MoveDirection.Forward:
-                    return transform.position + Vector3.forward;
+                    return transform.position + transform.forward;
                 case MoveDirection.Left:
-                    return transform.position + Vector3.left;
+                    return transform.position + -transform.right;
                 case MoveDirection.Right:
-                    return transform.position + Vector3.right;
+                    return transform.position + transform.right;
                 case MoveDirection.Back:
-                    return transform.position + Vector3.back;
+                    return transform.position + -transform.forward;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(direction), direction, "Unknown direction!");
+
+                // case MoveDirection.Forward:
+                //     return transform.position + Vector3.forward;
+                // case MoveDirection.Left:
+                //     return transform.position + Vector3.left;
+                // case MoveDirection.Right:
+                //     return transform.position + Vector3.right;
+                // case MoveDirection.Back:
+                //     return transform.position + Vector3.back;
+                // default:
+                //     throw new ArgumentOutOfRangeException(nameof(direction), direction, "Unknown direction!");
             }
         }
 
         public bool CanMoveInDirection(MoveDirection direction)
         {
             Vector3 startingPosition = StartPosition(direction);
-
+       
             // shoot a raycast down to see if there is a tile that we can walk on
             if (Physics.Raycast(startingPosition + transform.up * 2, -transform.up, out RaycastHit hit, 100f))
             {
@@ -104,9 +113,10 @@ namespace Movement
                 }
 
                 Tile t = hit.collider.gameObject.GetComponent<Tile>();
-
+              
                 return t != null;
             }
+     
 
             return false;
         }

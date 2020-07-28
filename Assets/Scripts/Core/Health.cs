@@ -10,6 +10,7 @@ namespace Core
 
         // for now, everything dies in one hit
         public event Action OnDeath;
+        public event Action OnHit;
 
         private Animator _animator;
         public bool IsDead { get; set; }
@@ -28,6 +29,7 @@ namespace Core
 
         private IEnumerator Die()
         {
+            OnHit?.Invoke();
             // wait a little bit so we don't die as soon as the attack animation starts
             yield return new WaitForSeconds(0.5f);
             _animator.SetBool(Dead, true);

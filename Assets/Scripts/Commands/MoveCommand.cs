@@ -50,7 +50,7 @@ namespace Commands
             StopMovementAnimation();
         }
 
-        public override bool CanPerformCommand()
+        protected override bool DoCanPerformCommand()
         {
             if (_doable == null)
             {

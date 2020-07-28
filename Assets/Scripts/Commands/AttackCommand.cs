@@ -30,7 +30,7 @@ namespace Commands
             return "Attack!";
         }
 
-        public override bool CanPerformCommand()
+        protected override bool DoCanPerformCommand()
         {
             if (_attacker.GetComponent<Health>().IsDead)
             {

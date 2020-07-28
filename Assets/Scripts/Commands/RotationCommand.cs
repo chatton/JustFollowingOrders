@@ -32,7 +32,7 @@ namespace Commands
         {
         }
 
-        public override bool CanPerformCommand()
+        protected override bool DoCanPerformCommand()
         {
             return true; // should always be able to rotate
         }

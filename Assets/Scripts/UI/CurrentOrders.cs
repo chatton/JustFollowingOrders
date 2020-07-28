@@ -15,7 +15,14 @@ namespace UI
         {
             text.text = "No Orders";
             LevelManager.Instance.OnCommandBufferChanged += UpdateVisuals;
+            CommandProcessor.Instance.OnSkipCommand += HandleSkippedCommand;
         }
+
+
+        private void HandleSkippedCommand(Command skippedCommand)
+        {
+            Debug.Log("Skipped the command: " + skippedCommand);
+        }    
 
         private string BuildCommandString(Command[] commands)
         {

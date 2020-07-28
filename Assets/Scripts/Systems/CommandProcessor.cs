@@ -5,6 +5,7 @@ using Commands;
 using UnityEngine;
 using Util;
 using System.Linq;
+using Enemies;
 
 namespace Systems
 {
@@ -13,10 +14,10 @@ namespace Systems
         [SerializeField] private float commandSpeed = 5f;
         public bool IsProcessingCommands => false;
         public event Action OnBeginCommandProcessing;
+        public event Action<Command> OnSkipCommand;
 
         private IProgrammable[] _programmables;
         private Stack<IEnumerable<Command>> _undoStack;
-        private Dictionary<IProgrammable, Command> _previousCommands;
         private Command _priorityCommand;
         private float _afterSeconds;
         private Coroutine _coroutine;
@@ -27,29 +28,15 @@ namespace Systems
         private bool AllPriorityCommandsAreFinished => _priorityCommands.All(p => p.IsFinished());
 
         private bool AllCommandsAreFinished =>
-            _programmables.All(p => p.CurrentCommand() == null || p.CurrentCommand().IsFinished());
+            _programmables.All(p =>
+                p.CurrentCommand() == null || p.CurrentCommand().IsFinished() || p.CurrentCommand().WasSkipped());
 
         void Awake()
         {
-            _previousCommands = new Dictionary<IProgrammable, Command>();
+            // _previousCommands = new Dictionary<IProgrammable, Command>();
             _undoStack = new Stack<IEnumerable<Command>>();
             _programmables = FindObjectsOfType<MonoBehaviour>().OfType<IProgrammable>().ToArray();
             _priorityCommands = new List<Command>();
-            // CommandBuffer.Instance.OnAssignCommands +=
-            // () => StartCoroutine(Instance.ProcessCommands());
-        }
-
-        public void DoCommandProcessing()
-        {
-            if (_coroutine == null)
-            {
-                OnBeginCommandProcessing?.Invoke();
-                _coroutine = StartCoroutine(ProcessCommands());
-            }
-            else
-            {
-                Debug.Log("Tried to call DoCommandProcessing when there was already a coroutine running!");
-            }
         }
 
         private bool _shouldProcessCommands;
@@ -79,7 +66,15 @@ namespace Systems
                 }
 
                 Command command = programmable.CurrentCommand();
-                command.Execute(Time.deltaTime);
+                if (command.CanBePerformed())
+                {
+                    command.Execute(Time.deltaTime);
+                }
+                else
+                {
+                    command.Skip();
+                    OnSkipCommand?.Invoke(command);
+                }
             }
 
             if (AllCommandsAreFinished)
@@ -103,117 +98,6 @@ namespace Systems
             }
         }
 
-
-        private IEnumerator ProcessCommands()
-        {
-            while (!_programmables.All(p => p.HasCompletedAllCommands()))
-            {
-                if (_programmables.All(p => !p.HasNextCommand()))
-                {
-                    Debug.Log("All commands finished running.");
-                    yield break;
-                }
-
-                yield return ExecuteAllCommands();
-
-                bool allCommandsFinished =
-                    _programmables.All(p => p.CurrentCommand() == null || p.CurrentCommand().IsFinished());
-
-                if (allCommandsFinished)
-                {
-                    ProgressToNextCommands();
-                }
-            }
-        }
-
-        private IEnumerator ExecuteAllCommands()
-        {
-            foreach (IProgrammable programmable in _programmables)
-            {
-                if (!programmable.HasNextCommand())
-                {
-                    continue;
-                }
-
-                Command command = programmable.CurrentCommand();
-                bool commandIsNull = command == null;
-
-                if (!commandIsNull)
-                {
-                    if (!_previousCommands.ContainsKey(programmable))
-                    {
-                        // this is the first command
-                        _previousCommands[programmable] = command;
-                    }
-
-                    // command is not the same type as the previously executed one
-                    if (_previousCommands[programmable].GetType() != command.GetType())
-                    {
-                        // end the previous command consecutive chain
-                        _previousCommands[programmable].AfterConsecutiveCommands();
-                    }
-                    else
-                    {
-                        _previousCommands[programmable].BeforeConsecutiveCommands();
-                    }
-
-                    // TODO: remove command or something when it's not possible to perform it. For now just 
-                    // skip over it
-                    if (command.CanPerformCommand() || _priorityCommand != null)
-                    {
-                        bool stillCompletingPreviousCommand =
-                            !command.IsFinished() && command == _previousCommands[programmable];
-
-                        // make sure to finish any currently executing commands
-                        if (stillCompletingPreviousCommand || _priorityCommand == null)
-                        {
-                            yield return HandleRegularCommand(command, programmable);
-                        }
-                        // then jump over to a priority command instead. We should never have more than one.
-                        else if (_priorityCommand != null)
-                        {
-                            yield return HandlePriorityCommand(command);
-                        }
-
-
-                        if (programmable.OnLastCommand())
-                        {
-                            command.AfterConsecutiveCommands();
-                        }
-                    }
-                    else
-                    {
-                        command.AfterConsecutiveCommands();
-                        Destroy(command.gameObject);
-                    }
-                }
-            }
-        }
-
-        private IEnumerator HandleRegularCommand(Command command, IProgrammable programmable)
-        {
-            command.Execute(Time.deltaTime);
-            _previousCommands[programmable] = command;
-            yield return new WaitForSeconds(Time.deltaTime / commandSpeed);
-        }
-
-        private IEnumerator HandlePriorityCommand(Command currentCommand)
-        {
-            if (currentCommand != null)
-            {
-                currentCommand.AfterConsecutiveCommands();
-            }
-
-            yield return new WaitForSeconds(_afterSeconds);
-            _afterSeconds = 0;
-            _priorityCommand.Execute(Time.deltaTime);
-            yield return new WaitForSeconds(Time.deltaTime / commandSpeed);
-            if (_priorityCommand.IsFinished())
-            {
-                _undoStack.Push(new List<Command> {_priorityCommand});
-                _priorityCommand = null;
-            }
-        }
 
         private void ProgressToNextCommands()
         {
@@ -242,12 +126,6 @@ namespace Systems
                 }
             }
         }
-
-        // public void ExecutePriorityCommand(Command command, float afterSeconds)
-        // {
-        //     _afterSeconds = afterSeconds;
-        //     _priorityCommand = command;
-        // }
 
         public void ExecutePriorityCommand(Command command, float afterSeconds)
         {

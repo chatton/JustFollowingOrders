@@ -45,7 +45,8 @@ namespace Core
 
         public bool HasCompletedAllCommands()
         {
-            return OnLastCommand() && CurrentCommand().IsFinished();
+            return _commands.All(c => c.IsFinished() || c.WasSkipped());
+            // return OnLastCommand() && CurrentCommand().IsFinished();
         }
 
         public void AssignCommands(IEnumerable<Command> commands)
