@@ -60,7 +60,7 @@ namespace Movement
             //     StartPosition(MoveDirection.Back) - Vector3.down);
             // Gizmos.DrawLine(StartPosition(MoveDirection.Forward) + transform.up * 2f,
             //     StartPosition(MoveDirection.Forward) - Vector3.down);
-            
+
             Gizmos.DrawLine(StartPosition(MoveDirection.Right) + Vector3.up * 2f,
                 StartPosition(MoveDirection.Right) - Vector3.down);
             Gizmos.DrawLine(StartPosition(MoveDirection.Left) + Vector3.up * 2f,
@@ -102,21 +102,21 @@ namespace Movement
         public bool CanMoveInDirection(MoveDirection direction)
         {
             Vector3 startingPosition = StartPosition(direction);
-       
+
             // shoot a raycast down to see if there is a tile that we can walk on
             if (Physics.Raycast(startingPosition + transform.up * 2, -transform.up, out RaycastHit hit, 100f))
             {
                 // a key will always be on a walkable tile
-                if (hit.collider.CompareTag("Key") || hit.collider.CompareTag("Chest"))
+                if (hit.collider.CompareTag("Key"))
                 {
                     return true;
                 }
 
                 Tile t = hit.collider.gameObject.GetComponent<Tile>();
-              
+
                 return t != null;
             }
-     
+
 
             return false;
         }

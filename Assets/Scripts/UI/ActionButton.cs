@@ -2,18 +2,17 @@
 using System.Collections.Generic;
 using Systems;
 using Commands;
-using Movement;
 using UnityEngine;
 
 namespace UI
 {
     public class ActionButton : MonoBehaviour
     {
-        private Dictionary<string, Func<Transform, Command>> commandFuncs;
+        private Dictionary<string, Func<Transform, Command>> _commandFuncs;
 
         private void Awake()
         {
-            commandFuncs = new Dictionary<string, Func<Transform, Command>>
+            _commandFuncs = new Dictionary<string, Func<Transform, Command>>
             {
                 {
                     "MoveForward",
@@ -35,6 +34,9 @@ namespace UI
                 },
                 {
                     "Attack", t => CommandFactory.Instance.CreateAttackCommand(t)
+                },
+                {
+                    "Wait", t => CommandFactory.Instance.CreateWaitCommand(t)
                 }
             };
         }
@@ -49,8 +51,10 @@ namespace UI
                 return;
             }
 
-            lm.AddCommand(commandFuncs[actionName].Invoke(lm.SelectedCommandBuffer.transform));
+            Command cmd = _commandFuncs[actionName].Invoke(lm.SelectedCommandBuffer.transform);
+            lm.AddCommand(cmd);
+            // TODO: implement hinting for commands
+            // ShadowCommandProcessor.Instance.ProcessShadowCommand(cmd);
         }
-        
     }
 }

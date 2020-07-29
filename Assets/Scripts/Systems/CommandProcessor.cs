@@ -5,6 +5,7 @@ using Commands;
 using UnityEngine;
 using Util;
 using System.Linq;
+using Core;
 using Enemies;
 
 namespace Systems
@@ -22,6 +23,9 @@ namespace Systems
         private float _afterSeconds;
         private Coroutine _coroutine;
         private List<Command> _priorityCommands;
+
+        private Unit _shadowUnit;
+        private bool _processShadowCommands;
 
 
         private bool AllProgrammablesHaveCompletedAllCommands => _programmables.All(p => p.HasCompletedAllCommands());
@@ -46,6 +50,11 @@ namespace Systems
             _shouldProcessCommands = true;
         }
 
+        public void StartProcessingShadowCommands()
+        {
+            _processShadowCommands = true;
+        }
+
         private bool ThereAreCommandsToProcess()
         {
             return _shouldProcessCommands && _programmables.Any(p => !p.HasCompletedAllCommands());
@@ -53,11 +62,34 @@ namespace Systems
 
         private void Update()
         {
+            if (_processShadowCommands)
+            {
+                ProcessShadowCommands();
+                return;
+            }
+
             if (!ThereAreCommandsToProcess())
             {
                 return;
             }
 
+            ProcessRealCommands();
+        }
+
+        private void ProcessShadowCommands()
+        {
+        }
+
+        private void ProcessShadowCommand(Command command)
+        {
+            while (!command.IsFinished())
+            {
+                command.Execute(Time.deltaTime);
+            }
+        }
+
+        private void ProcessRealCommands()
+        {
             foreach (IProgrammable programmable in _programmables)
             {
                 if (!programmable.HasNextCommand())

@@ -36,6 +36,7 @@ namespace Commands
             {
                 return false;
             }
+            Debug.Log(_attacker.GetTargetInRange());
 
             return _attacker.GetTargetInRange() != null;
         }

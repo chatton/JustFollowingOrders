@@ -9,9 +9,13 @@ namespace Enemies
 {
     public class Enemy : MonoBehaviour, IProgrammable
     {
+        [SerializeField] private bool loopCommands = false;
+
         private List<Command> _commands;
         private int _commandIndex;
         private Health _health;
+
+
         // private KillBox _killBox;
 
         private void Start()
@@ -19,9 +23,9 @@ namespace Enemies
             _commands = GetComponentsInChildren<Command>().ToList();
             // _killBox = GetComponentInChildren<KillBox>();
             _health = GetComponent<Health>();
-            
+
             // as soon as this unit gets hit, unregister all commands
-            
+
             _health.OnHit += SkipAll;
             // _health.OnHit += () => _killBox.gameObject.SetActive(false);
         }
@@ -38,7 +42,7 @@ namespace Enemies
         public void MoveOntoNextCommand()
         {
             _commandIndex++;
-            if (_commandIndex == _commands.Count)
+            if (_commandIndex == _commands.Count && loopCommands)
             {
                 _commandIndex = 0;
             }
@@ -56,19 +60,34 @@ namespace Enemies
 
         public bool HasNextCommand()
         {
-            return _commands.Count > 0;
+            if (loopCommands)
+            {
+                return _commands.Count > 0;
+            }
+
+            return _commandIndex < _commands.Count;
         }
 
         public bool OnLastCommand()
         {
-            return false;
+            if (!loopCommands)
+            {
+                return false;
+            }
+
+            return _commandIndex == _commands.Count - 1;
         }
 
 
         public bool HasCompletedAllCommands()
         {
             // we have never finished all commands if we have any, we want to cycle through them
-            return _commands.Count == 0;
+            if (loopCommands)
+            {
+                return _commands.Count == 0;
+            }
+
+            return _commands.All(c => c.IsFinished() || c.WasSkipped());
         }
     }
 }

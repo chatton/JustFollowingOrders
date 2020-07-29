@@ -2,6 +2,7 @@
 using Commands;
 using Core;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using Util;
 
 namespace Systems
@@ -46,6 +47,11 @@ namespace Systems
         {
             SelectedCommandBuffer.RemoveCommand();
             OnCommandBufferChanged?.Invoke(SelectedCommandBuffer);
+        }
+
+        public void LoadNextLevel()
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
         }
     }
 }

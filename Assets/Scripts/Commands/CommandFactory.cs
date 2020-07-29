@@ -12,6 +12,7 @@ namespace Commands
         [SerializeField] private MoveCommand moveCommandPrefab;
         [SerializeField] private RotationCommand rotateCommandPrefab;
         [SerializeField] private AttackCommand attackCommandPrefab;
+        [SerializeField] private WaitCommand waitCommandPrefab;
 
         public Command CreateMovementCommand(MoveDirection direction, Transform parent)
         {
@@ -33,7 +34,13 @@ namespace Commands
         {
             AttackCommand command =
                 Instantiate(attackCommandPrefab, parent.transform.position, Quaternion.identity, parent);
-            // command.direction = direction;
+            return command;
+        }
+
+        public Command CreateWaitCommand(Transform parent)
+        {
+            WaitCommand command =
+                Instantiate(waitCommandPrefab, parent.transform.position, Quaternion.identity, parent);
             return command;
         }
     }

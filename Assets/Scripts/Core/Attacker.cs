@@ -12,7 +12,8 @@ namespace Core
         public Health GetTargetInRange()
         {
             Vector3 forward = attackPointOrigin.TransformDirection(Vector3.forward) * attackRange;
-            if (Physics.Raycast(attackPointOrigin.position, forward, out RaycastHit hit))
+            if (Physics.Raycast(attackPointOrigin.position, forward, out RaycastHit hit, attackRange,
+                LayerMask.GetMask("Enemy")))
             {
                 return hit.collider.GetComponent<Health>();
             }

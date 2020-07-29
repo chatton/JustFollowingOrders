@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using Systems;
 using UnityEngine;
 
@@ -17,6 +18,7 @@ namespace Core
         private void Open()
         {
             _animator.SetBool(OpenHash, true);
+            StartCoroutine(LoadNextLevel());
         }
 
         private void OnTriggerEnter(Collider other)
@@ -25,6 +27,12 @@ namespace Core
             {
                 Open();
             }
+        }
+
+        IEnumerator LoadNextLevel()
+        {
+            yield return new WaitForSeconds(2f);
+            LevelManager.Instance.LoadNextLevel();
         }
     }
 }

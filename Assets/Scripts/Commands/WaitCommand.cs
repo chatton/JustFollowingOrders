@@ -21,6 +21,11 @@ namespace Commands
             // return _isFinished;
         }
 
+        public override string ToString()
+        {
+            return "Wait";
+        }
+
         public override void Execute(float deltaTime)
         {
             if (_isFinished)
