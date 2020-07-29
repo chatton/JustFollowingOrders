@@ -1,47 +1,39 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
+using Systems;
+using Core;
 using Movement;
 using UnityEngine;
-using Util;
 
 namespace Commands
 {
-    public class CommandFactory : Singleton<CommandFactory>
+    public static class CommandFactory
     {
-        [SerializeField] private MoveCommand moveCommandPrefab;
-        [SerializeField] private RotationCommand rotateCommandPrefab;
-        [SerializeField] private AttackCommand attackCommandPrefab;
-        [SerializeField] private WaitCommand waitCommandPrefab;
-
-        public Command CreateMovementCommand(MoveDirection direction, Transform parent)
+        public static ICommand CreateMovementCommand(MoveDirection direction, CommandBuffer buffer)
         {
-            MoveCommand command =
-                Instantiate(moveCommandPrefab, parent.transform.position, Quaternion.identity, parent);
-            command.direction = direction;
-            return command;
+            Mover mover = buffer.GetComponent<Mover>();
+            Animator animator = buffer.GetComponentInChildren<Animator>();
+            Health health = buffer.GetComponent<Health>();
+            return new MoveCommand(direction, mover, animator, health);
         }
 
-        public Command CreateRotationCommand(RotationDirection direction, Transform parent)
+        public static ICommand CreateRotationCommand(RotationDirection direction, CommandBuffer buffer)
         {
-            RotationCommand command =
-                Instantiate(rotateCommandPrefab, parent.transform.position, Quaternion.identity, parent);
-            command.direction = direction;
-            return command;
+            Mover mover = buffer.GetComponent<Mover>();
+            Health health = buffer.GetComponent<Health>();
+            return new RotationCommand(direction, mover, health);
         }
 
-        public Command CreateAttackCommand(Transform parent)
+        public static ICommand CreateAttackCommand(CommandBuffer buffer)
         {
-            AttackCommand command =
-                Instantiate(attackCommandPrefab, parent.transform.position, Quaternion.identity, parent);
-            return command;
+            Animator animator = buffer.GetComponentInChildren<Animator>();
+            Health health = buffer.GetComponent<Health>();
+            Attacker attacker = buffer.GetComponent<Attacker>();
+            return new AttackCommand(animator, health, attacker);
         }
 
-        public Command CreateWaitCommand(Transform parent)
+        public static ICommand CreateWaitCommand(CommandBuffer buffer)
         {
-            WaitCommand command =
-                Instantiate(waitCommandPrefab, parent.transform.position, Quaternion.identity, parent);
-            return command;
+            Health health = buffer.GetComponent<Health>();
+            return new WaitCommand(health);
         }
     }
 }

@@ -1,23 +1,21 @@
-using System;
-using System.Collections;
 using Core;
-using UnityEngine;
 
 namespace Commands
 {
-    public class WaitCommand : Command
+    public class WaitCommand : ICommand
     {
         private bool _isFinished;
         private float _elapsedTime;
         private float _finishedAfter = 0.5f;
         private Health _health;
 
-        private void Awake()
+
+        public WaitCommand(Health health)
         {
-            _health = GetComponentInParent<Health>();
+            _health = health;
         }
 
-        public override bool IsFinished()
+        public bool IsFinished()
         {
             if (_isFinished)
             {
@@ -34,7 +32,12 @@ namespace Commands
             return "Wait";
         }
 
-        public override void Execute(float deltaTime)
+        public bool CanBeExecuted()
+        {
+            return !_health.IsDead;
+        }
+
+        public void Execute(float deltaTime)
         {
             if (_isFinished)
             {
@@ -47,33 +50,11 @@ namespace Commands
                 _isFinished = true;
                 _elapsedTime = 0;
             }
-
-            // if (!transform.parent.gameObject.activeSelf) return;
-            // _isFinished = false;
-            // StartCoroutine(Wait(1f));
         }
 
 
-        #region EmptyMethods
-
-        public override void BeforeConsecutiveCommands()
+        public void Undo()
         {
         }
-
-        public override void AfterConsecutiveCommands()
-        {
-        }
-
-        protected override bool DoCanPerformCommand()
-        {
-            return !_health.IsDead;
-        }
-
-
-        public override void Undo()
-        {
-        }
-
-        #endregion
     }
 }

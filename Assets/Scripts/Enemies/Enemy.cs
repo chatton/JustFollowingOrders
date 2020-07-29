@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Systems;
 using Commands;
@@ -11,33 +12,67 @@ namespace Enemies
     {
         [SerializeField] private bool loopCommands = false;
         [SerializeField] private bool _hasCompletedAllCommands;
+        [SerializeField] private CommandType[] commandTypes;
 
-        private List<Command> _commands;
+        private List<ICommand> _commands;
         private int _commandIndex;
         private Health _health;
+        private CommandBuffer _buffer;
 
 
         // private KillBox _killBox;
 
         private void Start()
         {
-            _commands = GetComponentsInChildren<Command>().ToList();
-            // _killBox = GetComponentInChildren<KillBox>();
+            _buffer = GetComponent<CommandBuffer>();
+            _commands = BuildCommands();
             _health = GetComponent<Health>();
-
-            // as soon as this unit gets hit, unregister all commands
-
             _health.OnHit += SkipAll;
-            // _health.OnHit += () => _killBox.gameObject.SetActive(false);
         }
 
 
+        private List<ICommand> BuildCommands()
+        {
+            List<ICommand> allCommands = new List<ICommand>();
+            foreach (CommandType commandType in commandTypes)
+            {
+                switch (commandType)
+                {
+                    case CommandType.MoveForward:
+                        allCommands.Add(CommandFactory.CreateMovementCommand(MoveDirection.Forward, _buffer));
+                        break;
+                    case CommandType.MoveBack:
+                        allCommands.Add(CommandFactory.CreateMovementCommand(MoveDirection.Back, _buffer));
+                        break;
+                    case CommandType.MoveLeft:
+                        allCommands.Add(CommandFactory.CreateMovementCommand(MoveDirection.Left, _buffer));
+                        break;
+                    case CommandType.MoveRight:
+                        allCommands.Add(CommandFactory.CreateMovementCommand(MoveDirection.Right, _buffer));
+                        break;
+                    case CommandType.Attack:
+                        allCommands.Add(CommandFactory.CreateAttackCommand(_buffer));
+                        break;
+                    case CommandType.Wait:
+                        allCommands.Add(CommandFactory.CreateWaitCommand(_buffer));
+                        break;
+                    case CommandType.RotateLeft:
+                        allCommands.Add(CommandFactory.CreateRotationCommand(RotationDirection.Left, _buffer));
+                        break;
+                    case CommandType.RotateRight:
+                        allCommands.Add(CommandFactory.CreateRotationCommand(RotationDirection.Right, _buffer));
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
+            }
+
+            return allCommands;
+        }
+
         private void SkipAll()
         {
-            foreach (Command c in _commands)
-            {
-                c.Skip();
-            }
+            CommandProcessor.Instance.SkipAll(this);
         }
 
         public void MoveOntoNextCommand()
@@ -49,7 +84,7 @@ namespace Enemies
             }
         }
 
-        public Command CurrentCommand()
+        public ICommand CurrentCommand()
         {
             if (_commandIndex >= _commands.Count)
             {
@@ -71,56 +106,17 @@ namespace Enemies
 
         public void Reset()
         {
-            throw new System.NotImplementedException();
+            Debug.Log("Enemy::Reset");
         }
 
-        public bool OnLastCommand()
-        {
-            if (!loopCommands)
-            {
-                return false;
-            }
-
-            return _commandIndex == _commands.Count - 1;
-        }
-
-
-        public bool HasCompletedAllCommands()
-        {
-            // we have never finished all commands if we have any, we want to cycle through them
-            if (loopCommands)
-            {
-                return _commands.Count == 0;
-            }
-
-            for (int index = 0; index < _commands.Count; index++)
-            {
-                var c = _commands[index];
-                if (!c.IsFinished())
-                {
-                    Debug.Log(c + index.ToString() + " is not finished!");
-                }
-
-
-                if (c.WasSkipped())
-                {
-                    Debug.Log(c + index.ToString() + " was Skipped!");
-                }
-
-                // Debug.Log("finished" + c.IsFinished());
-                // Debug.Log("skipped" + c.WasSkipped());
-                // Debug.Log("One or the other: " + (c.IsFinished() || c.WasSkipped()));
-            }
-
-            Debug.Log("Commands: " + _commands.Count);
-
-            _hasCompletedAllCommands = _commands.All(c => c.IsFinished() || c.WasSkipped());
-            return _hasCompletedAllCommands;
-        }
-
-        public IEnumerable<Command> Commands()
+        public IEnumerable<ICommand> Commands()
         {
             return _commands;
+        }
+
+        public void AssignCommands(List<ICommand> commands)
+        {
+            _commands = new List<ICommand>(commands);
         }
     }
 }

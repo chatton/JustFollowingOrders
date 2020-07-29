@@ -6,7 +6,7 @@ namespace Systems
 {
     public class ShadowCommandProcessor : Singleton<ShadowCommandProcessor>
     {
-        public void ProcessShadowCommand(Command command)
+        public void ProcessShadowCommand(ICommand command)
         {
             while (!command.IsFinished())
             {

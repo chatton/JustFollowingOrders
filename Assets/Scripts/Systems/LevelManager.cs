@@ -31,7 +31,7 @@ namespace Systems
             }
         }
 
-        public void AddCommand(Command command)
+        public void AddCommand(ICommand command)
         {
             if (SelectedCommandBuffer == null)
             {

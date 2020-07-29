@@ -19,19 +19,19 @@ namespace UI
         }
 
 
-        private void HandleSkippedCommand(Command skippedCommand)
+        private void HandleSkippedCommand(ICommand skippedCommand)
         {
             Debug.Log("Skipped the command: " + skippedCommand);
         }
 
-        private string BuildCommandString(Command[] commands)
+        private string BuildCommandString(ICommand[] commands)
         {
-            List<List<Command>> commandsByType = new List<List<Command>>();
+            List<List<ICommand>> commandsByType = new List<List<ICommand>>();
 
-            List<Command> tmp = new List<Command>();
+            List<ICommand> tmp = new List<ICommand>();
             commandsByType.Add(tmp);
-            Command prev = null;
-            foreach (Command c in commands)
+            ICommand prev = null;
+            foreach (ICommand c in commands)
             {
                 if (prev != null)
                 {
@@ -41,7 +41,7 @@ namespace UI
                     }
                     else
                     {
-                        tmp = new List<Command> {c};
+                        tmp = new List<ICommand> {c};
                         commandsByType.Add(tmp);
                     }
                 }
@@ -59,7 +59,7 @@ namespace UI
                 return "";
             }
 
-            foreach (List<Command> commandList in commandsByType)
+            foreach (List<ICommand> commandList in commandsByType)
             {
                 if (commandList.Count == 0)
                 {

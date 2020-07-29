@@ -8,35 +8,35 @@ namespace UI
 {
     public class ActionButton : MonoBehaviour
     {
-        private Dictionary<string, Func<Transform, Command>> _commandFuncs;
+        private Dictionary<string, Func<CommandBuffer, ICommand>> _commandFuncs;
 
         private void Awake()
         {
-            _commandFuncs = new Dictionary<string, Func<Transform, Command>>
+            _commandFuncs = new Dictionary<string, Func<CommandBuffer, ICommand>>
             {
                 {
                     "MoveForward",
-                    t => CommandFactory.Instance.CreateMovementCommand(MoveDirection.Forward, t)
+                    t => CommandFactory.CreateMovementCommand(MoveDirection.Forward, t)
                 },
-                {"MoveBack", t => CommandFactory.Instance.CreateMovementCommand(MoveDirection.Back, t)},
-                {"MoveLeft", t => CommandFactory.Instance.CreateMovementCommand(MoveDirection.Left, t)},
+                {"MoveBack", t => CommandFactory.CreateMovementCommand(MoveDirection.Back, t)},
+                {"MoveLeft", t => CommandFactory.CreateMovementCommand(MoveDirection.Left, t)},
                 {
                     "MoveRight",
-                    t => CommandFactory.Instance.CreateMovementCommand(MoveDirection.Right, t)
+                    t => CommandFactory.CreateMovementCommand(MoveDirection.Right, t)
                 },
                 {
                     "RotateRight",
-                    t => CommandFactory.Instance.CreateRotationCommand(RotationDirection.Right, t)
+                    t => CommandFactory.CreateRotationCommand(RotationDirection.Right, t)
                 },
                 {
                     "RotateLeft",
-                    t => CommandFactory.Instance.CreateRotationCommand(RotationDirection.Left, t)
+                    t => CommandFactory.CreateRotationCommand(RotationDirection.Left, t)
                 },
                 {
-                    "Attack", t => CommandFactory.Instance.CreateAttackCommand(t)
+                    "Attack", t => CommandFactory.CreateAttackCommand(t)
                 },
                 {
-                    "Wait", t => CommandFactory.Instance.CreateWaitCommand(t)
+                    "Wait", t => CommandFactory.CreateWaitCommand(t)
                 }
             };
         }
@@ -51,7 +51,7 @@ namespace UI
                 return;
             }
 
-            Command cmd = _commandFuncs[actionName].Invoke(lm.SelectedCommandBuffer.transform);
+            ICommand cmd = _commandFuncs[actionName].Invoke(lm.SelectedCommandBuffer);
             lm.AddCommand(cmd);
             // TODO: implement hinting for commands
             // ShadowCommandProcessor.Instance.ProcessShadowCommand(cmd);

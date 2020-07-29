@@ -1,4 +1,5 @@
-﻿using Systems;
+﻿using System;
+using Systems;
 using Commands;
 using UnityEngine;
 
@@ -6,6 +7,13 @@ namespace Enemies
 {
     public class KillBox : MonoBehaviour
     {
+        private CommandBuffer _buffer;
+
+        private void Awake()
+        {
+            _buffer = GetComponentInParent<CommandBuffer>();
+        }
+
         private void OnTriggerEnter(Collider other)
         {
             if (!other.CompareTag("Player"))
@@ -20,7 +28,7 @@ namespace Enemies
         private void Attack()
         {
             CommandProcessor.Instance.ExecutePriorityCommand(
-                CommandFactory.Instance.CreateAttackCommand(transform.parent), 0.5f);
+                CommandFactory.CreateAttackCommand(_buffer), 0.5f);
         }
     }
 }

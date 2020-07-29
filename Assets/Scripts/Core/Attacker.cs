@@ -13,7 +13,7 @@ namespace Core
         {
             Vector3 forward = attackPointOrigin.TransformDirection(Vector3.forward) * attackRange;
             if (Physics.Raycast(attackPointOrigin.position, forward, out RaycastHit hit, attackRange,
-                LayerMask.GetMask("Enemy")))
+                LayerMask.GetMask("Attackable")))
             {
                 return hit.collider.GetComponent<Health>();
             }

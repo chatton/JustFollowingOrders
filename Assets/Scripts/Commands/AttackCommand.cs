@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Commands
 {
-    public class AttackCommand : Command
+    public class AttackCommand : ICommand
     {
         private static readonly int Attack = Animator.StringToHash("Attacking");
 
@@ -19,10 +19,11 @@ namespace Commands
         private bool _finishedAttackAnimation;
         private bool _attackerDead;
 
-        private void Awake()
+        public AttackCommand(Animator animator, Health health, Attacker attacker)
         {
-            _animator = transform.parent.GetComponentInChildren<Animator>();
-            _attacker = GetComponentInParent<Attacker>();
+            _animator = animator;
+            // _health = health;
+            _attacker = attacker;
         }
 
         public override string ToString()
@@ -30,7 +31,7 @@ namespace Commands
             return "Attack!";
         }
 
-        protected override bool DoCanPerformCommand()
+        public bool CanBeExecuted()
         {
             if (_attacker.GetComponent<Health>().IsDead)
             {
@@ -41,20 +42,16 @@ namespace Commands
             {
                 return true;
             }
-
-            Debug.Log(_attacker.GetTargetInRange());
-
             return _attacker.GetTargetInRange() != null;
         }
 
-        public override void Execute(float timeDelta)
+        public void Execute(float timeDelta)
         {
             _elapsedTime += timeDelta;
-            // if (!_finishedAttackAnimation && _elapsedTime >= _animator.GetCurrentAnimatorStateInfo(0).length)
             if (!_finishedAttackAnimation && _elapsedTime >= 0.5f)
             {
                 _finishedAttackAnimation = true;
-                Debug.Log("Setting value to false!");
+                Debug.Log("Setting attack animation to false!");
                 _animator.SetBool(Attack, false);
                 return;
             }
@@ -70,7 +67,7 @@ namespace Commands
                 return;
             }
 
-            Debug.Log(gameObject.transform.parent.name + " is performing the AttackCommand");
+            Debug.Log(_attacker.name + " is performing the AttackCommand");
             _hasAttacked = true;
             _animator.SetBool(Attack, true);
             _health = _attacker.GetTargetInRange();
@@ -81,32 +78,21 @@ namespace Commands
 
         private void OnDeath()
         {
+            Debug.Log("OnDeath");
             _enemyDead = true;
         }
 
-        public override void Undo()
+        public void Undo()
         {
-            Debug.Log("Setting " + gameObject.name + " to active!");
+            Debug.Log("Setting " + _health.name + " to active!");
             _health.gameObject.SetActive(true);
         }
 
-        public override bool IsFinished()
+        public bool IsFinished()
         {
             bool isFinished = _attackerDead || (_enemyDead && _finishedAttackAnimation);
             Debug.Log("ATTACK FINISHED: " + isFinished);
             return isFinished;
         }
-
-        #region EmptyOverrides
-
-        public override void BeforeConsecutiveCommands()
-        {
-        }
-
-        public override void AfterConsecutiveCommands()
-        {
-        }
-
-        #endregion
     }
 }

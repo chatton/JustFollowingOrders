@@ -8,17 +8,17 @@ namespace Core
 {
     public class Unit : MonoBehaviour, IProgrammable
     {
-        private List<Command> _commands;
+        private List<ICommand> _commands;
         private int _commandIndex;
 
         [SerializeField] private bool _hasCompletedAllCommands;
 
         private void Start()
         {
-            _commands = GetComponentsInChildren<Command>().ToList();
+            _commands = GetComponentsInChildren<ICommand>().ToList();
         }
 
-        public Command ImmediateCommand { get; set; }
+        public ICommand ImmediateCommand { get; set; }
         public event Action OnReset;
 
         public void MoveOntoNextCommand()
@@ -26,7 +26,7 @@ namespace Core
             _commandIndex++;
         }
 
-        public Command CurrentCommand()
+        public ICommand CurrentCommand()
         {
             if (_commandIndex >= _commands.Count)
             {
@@ -53,22 +53,14 @@ namespace Core
         }
 
 
-        public bool HasCompletedAllCommands()
-        {
-            _hasCompletedAllCommands = _commands.All(c => c.IsFinished() || c.WasSkipped());
-            return _hasCompletedAllCommands;
-            // return OnLastCommand() && CurrentCommand().IsFinished();
-        }
-
-        public IEnumerable<Command> Commands()
+        public IEnumerable<ICommand> Commands()
         {
             return _commands;
         }
 
-        public void AssignCommands(IEnumerable<Command> commands)
+        public void AssignCommands(List<ICommand> commands)
         {
-            _commands = new List<Command>(commands);
-            Debug.Log(commands);
+            _commands = new List<ICommand>(commands);
         }
     }
 }

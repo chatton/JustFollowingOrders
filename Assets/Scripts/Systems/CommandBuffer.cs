@@ -1,29 +1,25 @@
-using System;
 using System.Collections.Generic;
 using Commands;
-using Core;
-using Movement;
 using UnityEngine;
-using Util;
 
 namespace Systems
 {
     public class CommandBuffer : MonoBehaviour
     {
-        private Unit _unit;
+        private IProgrammable _programmable;
 
-        private List<Command> _commands;
+        private List<ICommand> _commands;
 
-        public List<Command> Commands => _commands;
+        public List<ICommand> Commands => _commands;
 
         private void Start()
         {
-            _unit = GetComponent<Unit>();
-            _unit.OnReset += AssignCommands;
-            _commands = new List<Command>();
+            _programmable = GetComponent<IProgrammable>();
+            // _unit.OnReset += AssignCommands;
+            _commands = new List<ICommand>();
         }
 
-        public void AddCommand(Command command)
+        public void AddCommand(ICommand command)
         {
             _commands.Add(command);
             AssignCommands();
@@ -31,7 +27,7 @@ namespace Systems
 
         public void AssignCommands()
         {
-            _unit.AssignCommands(_commands);
+            _programmable.AssignCommands(_commands);
         }
 
         public void RemoveCommand()

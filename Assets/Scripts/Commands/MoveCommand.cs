@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Commands
 {
-    public class MoveCommand : Command
+    public class MoveCommand : ICommand
     {
         [SerializeField] public MoveDirection direction;
         private Mover _mover;
@@ -23,37 +23,22 @@ namespace Commands
 
         private bool IsAtTargetPosition => _mover.transform.position == _targetPosition;
 
-        private void Awake()
+        public MoveCommand(MoveDirection direction, Mover mover, Animator animator, Health health)
         {
-            _mover = GetComponentInParent<Mover>();
-            _health = GetComponentInParent<Health>();
-
-            _animator = transform.parent.GetComponentInChildren<Animator>();
+            this.direction = direction;
+            _mover = mover;
+            _animator = animator;
+            _health = health;
             _targetPosition = null;
-            // _mover.OnStop += () => { _animator.SetFloat(Speed, 0f); };
         }
 
-        private void PlayMovementAnimation()
+
+        public override string ToString()
         {
-            // _animator.SetBool(Walking, true);
+            return direction.ToString();
         }
 
-        private void StopMovementAnimation()
-        {
-            // _animator.SetBool(Walking, false);
-        }
-
-        public override void BeforeConsecutiveCommands()
-        {
-            PlayMovementAnimation();
-        }
-
-        public override void AfterConsecutiveCommands()
-        {
-            StopMovementAnimation();
-        }
-
-        protected override bool DoCanPerformCommand()
+        public bool CanBeExecuted()
         {
             if (_health.IsDead)
             {
@@ -69,12 +54,7 @@ namespace Commands
             return _doable.Value;
         }
 
-        public override string ToString()
-        {
-            return direction.ToString();
-        }
-
-        public override void Execute(float deltaTime)
+        public void Execute(float deltaTime)
         {
             // compute relative position when execute is called
             if (_targetPosition == null)
@@ -109,14 +89,14 @@ namespace Commands
             _mover.MoveTowards(_targetPosition.Value, deltaTime);
         }
 
-        public override void Undo()
+        public void Undo()
         {
             Transform t = _mover.transform;
             t.position = _initialPosition;
             t.rotation = _initialRotation;
         }
 
-        public override bool IsFinished()
+        public bool IsFinished()
         {
             return IsAtTargetPosition;
         }

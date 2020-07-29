@@ -5,14 +5,12 @@ namespace Commands
     public interface IProgrammable
     {
         void MoveOntoNextCommand();
-        Command CurrentCommand();
+        ICommand CurrentCommand();
         bool HasNextCommand();
 
         void Reset();
-        bool OnLastCommand();
+        IEnumerable<ICommand> Commands();
 
-        bool HasCompletedAllCommands();
-        // void AddCommand(Command command);
-        IEnumerable<Command> Commands();
+        void AssignCommands(List<ICommand> commands);
     }
 }

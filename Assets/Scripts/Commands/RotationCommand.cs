@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Commands
 {
-    public class RotationCommand : Command
+    public class RotationCommand : ICommand
     {
         [SerializeField] public RotationDirection direction;
         private Mover _mover;
@@ -15,33 +15,26 @@ namespace Commands
         private Quaternion _expectedQuaternion;
         private float _expectedY;
 
-        // private bool _finished;
+        
 
-        private void Awake()
+        public RotationCommand(RotationDirection direction, Mover mover, Health health)
         {
-            _mover = GetComponentInParent<Mover>();
-            _health = GetComponentInParent<Health>();
+            this.direction = direction;
+            _mover = mover;
+            _health = health;
         }
 
         public override string ToString()
         {
             return "Rotate " + direction;
         }
-
-        public override void BeforeConsecutiveCommands()
-        {
-        }
-
-        public override void AfterConsecutiveCommands()
-        {
-        }
-
-        protected override bool DoCanPerformCommand()
+        
+        public bool CanBeExecuted()
         {
             return !_health.IsDead;
         }
 
-        public override void Execute(float deltaTime)
+        public void Execute(float deltaTime)
         {
             if (_startingRotation == null)
             {
@@ -55,33 +48,24 @@ namespace Commands
                 // we need to account for our current angle. We add the rotation angle on top of where we currently are
                 _mover.Rotate(_startingRotation.Value.eulerAngles.y + GetYAxisRotationAngle(direction), deltaTime);
             }
-
-            // if (IsFinished())
-            // {
-            //     _finished = true;
-            // }
+            
         }
 
 
-        public override void Undo()
+        public void Undo()
         {
             _mover.transform.Rotate(Vector3.up, -GetYAxisRotationAngle(direction));
         }
 
-        public override bool IsFinished()
+        public bool IsFinished()
         {
-            // if (_finished)
-            // {
-            //     return _finished;
-            // }
+
 
             if (_startingRotation == null)
             {
                 return false;
             }
-
-            // Debug.Log("ExpectedY" + _expectedY);
-            // Debug.Log(_mover.transform.rotation.eulerAngles.y);
+            
 
             // if the expected rotation is 360 degrees
             // it's possible that we are on the opposite end at ~0
