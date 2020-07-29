@@ -8,6 +8,7 @@ namespace Commands
         Command CurrentCommand();
         bool HasNextCommand();
 
+        void Reset();
         bool OnLastCommand();
 
         bool HasCompletedAllCommands();

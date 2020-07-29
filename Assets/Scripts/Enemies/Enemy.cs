@@ -69,6 +69,11 @@ namespace Enemies
             return _commandIndex < _commands.Count;
         }
 
+        public void Reset()
+        {
+            throw new System.NotImplementedException();
+        }
+
         public bool OnLastCommand()
         {
             if (!loopCommands)

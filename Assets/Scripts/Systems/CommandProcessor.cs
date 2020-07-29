@@ -77,6 +77,9 @@ namespace Systems
         public void StartProcessingCommands()
         {
             _shouldProcessCommands = true;
+            // _finishedCommands.Clear();
+            // _skippedCommands.Clear();
+            Array.ForEach(_programmables, p => p.Reset());
         }
 
         public void StartProcessingShadowCommands()

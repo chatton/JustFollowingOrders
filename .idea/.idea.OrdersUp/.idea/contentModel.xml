@@ -80,9 +80,12 @@
             <e p="CommandProcessor.cs" t="Include" />
             <e p="LevelManager.cs" t="Include" />
             <e p="MouseController.cs" t="Include" />
+            <e p="ShadowCommandProcessor.cs" t="Include" />
           </e>
           <e p="UI" t="Include">
             <e p="ActionButton.cs" t="Include" />
+            <e p="CurrentOrders.cs" t="Include" />
+            <e p="UIEnabler.cs" t="Include" />
           </e>
           <e p="Util" t="Include">
             <e p="Singleton.cs" t="Include" />

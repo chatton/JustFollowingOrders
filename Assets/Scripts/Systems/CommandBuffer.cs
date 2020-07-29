@@ -16,9 +16,10 @@ namespace Systems
 
         public List<Command> Commands => _commands;
 
-        private void Awake()
+        private void Start()
         {
             _unit = GetComponent<Unit>();
+            _unit.OnReset += AssignCommands;
             _commands = new List<Command>();
         }
 
@@ -35,8 +36,11 @@ namespace Systems
 
         public void RemoveCommand()
         {
-            _commands.RemoveAt(_commands.Count - 1);
-            AssignCommands();
+            if (_commands.Count > 0)
+            {
+                _commands.RemoveAt(_commands.Count - 1);
+                AssignCommands();
+            }
         }
     }
 }

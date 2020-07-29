@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Commands;
 using UnityEngine;
@@ -18,6 +19,7 @@ namespace Core
         }
 
         public Command ImmediateCommand { get; set; }
+        public event Action OnReset;
 
         public void MoveOntoNextCommand()
         {
@@ -37,6 +39,12 @@ namespace Core
         public bool HasNextCommand()
         {
             return _commandIndex < _commands.Count;
+        }
+
+        public void Reset()
+        {
+            _commandIndex = 0;
+            OnReset?.Invoke();
         }
 
         public bool OnLastCommand()
@@ -60,6 +68,7 @@ namespace Core
         public void AssignCommands(IEnumerable<Command> commands)
         {
             _commands = new List<Command>(commands);
+            Debug.Log(commands);
         }
     }
 }
