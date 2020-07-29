@@ -10,6 +10,8 @@ namespace Core
         private List<Command> _commands;
         private int _commandIndex;
 
+        [SerializeField] private bool _hasCompletedAllCommands;
+
         private void Start()
         {
             _commands = GetComponentsInChildren<Command>().ToList();
@@ -45,8 +47,14 @@ namespace Core
 
         public bool HasCompletedAllCommands()
         {
-            return _commands.All(c => c.IsFinished() || c.WasSkipped());
+            _hasCompletedAllCommands = _commands.All(c => c.IsFinished() || c.WasSkipped());
+            return _hasCompletedAllCommands;
             // return OnLastCommand() && CurrentCommand().IsFinished();
+        }
+
+        public IEnumerable<Command> Commands()
+        {
+            return _commands;
         }
 
         public void AssignCommands(IEnumerable<Command> commands)

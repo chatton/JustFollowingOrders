@@ -53,5 +53,12 @@ namespace Systems
         {
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
         }
+
+        // ResetLevel will undo every command that has been executed effectively resetting the state
+        // of the level
+        public void ResetLevel()
+        {
+            // CommandProcessor.Instance.
+        }
     }
 }

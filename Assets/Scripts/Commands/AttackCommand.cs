@@ -36,6 +36,12 @@ namespace Commands
             {
                 return false;
             }
+
+            if (_hasAttacked)
+            {
+                return true;
+            }
+
             Debug.Log(_attacker.GetTargetInRange());
 
             return _attacker.GetTargetInRange() != null;
@@ -80,12 +86,15 @@ namespace Commands
 
         public override void Undo()
         {
+            Debug.Log("Setting " + gameObject.name + " to active!");
             _health.gameObject.SetActive(true);
         }
 
         public override bool IsFinished()
         {
-            return _attackerDead || (_enemyDead && _finishedAttackAnimation);
+            bool isFinished = _attackerDead || (_enemyDead && _finishedAttackAnimation);
+            Debug.Log("ATTACK FINISHED: " + isFinished);
+            return isFinished;
         }
 
         #region EmptyOverrides

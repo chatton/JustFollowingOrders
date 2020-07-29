@@ -1,4 +1,6 @@
+using System;
 using System.Collections;
+using Core;
 using UnityEngine;
 
 namespace Commands
@@ -8,6 +10,12 @@ namespace Commands
         private bool _isFinished;
         private float _elapsedTime;
         private float _finishedAfter = 0.5f;
+        private Health _health;
+
+        private void Awake()
+        {
+            _health = GetComponentInParent<Health>();
+        }
 
         public override bool IsFinished()
         {
@@ -45,11 +53,6 @@ namespace Commands
             // StartCoroutine(Wait(1f));
         }
 
-        private IEnumerator Wait(float seconds)
-        {
-            yield return new WaitForSeconds(seconds);
-            _isFinished = true;
-        }
 
         #region EmptyMethods
 
@@ -63,7 +66,7 @@ namespace Commands
 
         protected override bool DoCanPerformCommand()
         {
-            return true;
+            return !_health.IsDead;
         }
 
 

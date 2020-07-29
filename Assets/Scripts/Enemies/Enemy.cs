@@ -10,6 +10,7 @@ namespace Enemies
     public class Enemy : MonoBehaviour, IProgrammable
     {
         [SerializeField] private bool loopCommands = false;
+        [SerializeField] private bool _hasCompletedAllCommands;
 
         private List<Command> _commands;
         private int _commandIndex;
@@ -87,7 +88,34 @@ namespace Enemies
                 return _commands.Count == 0;
             }
 
-            return _commands.All(c => c.IsFinished() || c.WasSkipped());
+            for (int index = 0; index < _commands.Count; index++)
+            {
+                var c = _commands[index];
+                if (!c.IsFinished())
+                {
+                    Debug.Log(c + index.ToString() + " is not finished!");
+                }
+
+
+                if (c.WasSkipped())
+                {
+                    Debug.Log(c + index.ToString() + " was Skipped!");
+                }
+
+                // Debug.Log("finished" + c.IsFinished());
+                // Debug.Log("skipped" + c.WasSkipped());
+                // Debug.Log("One or the other: " + (c.IsFinished() || c.WasSkipped()));
+            }
+
+            Debug.Log("Commands: " + _commands.Count);
+
+            _hasCompletedAllCommands = _commands.All(c => c.IsFinished() || c.WasSkipped());
+            return _hasCompletedAllCommands;
+        }
+
+        public IEnumerable<Command> Commands()
+        {
+            return _commands;
         }
     }
 }

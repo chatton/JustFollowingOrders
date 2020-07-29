@@ -1,4 +1,5 @@
 using System;
+using Core;
 using Movement;
 using UnityEngine;
 
@@ -9,6 +10,7 @@ namespace Commands
         [SerializeField] public MoveDirection direction;
         private Mover _mover;
         private Animator _animator;
+        private Health _health;
 
         private Vector3? _targetPosition;
         private Vector3 _initialPosition;
@@ -24,6 +26,7 @@ namespace Commands
         private void Awake()
         {
             _mover = GetComponentInParent<Mover>();
+            _health = GetComponentInParent<Health>();
 
             _animator = transform.parent.GetComponentInChildren<Animator>();
             _targetPosition = null;
@@ -52,6 +55,11 @@ namespace Commands
 
         protected override bool DoCanPerformCommand()
         {
+            if (_health.IsDead)
+            {
+                return false;
+            }
+
             if (_doable == null)
             {
                 // whether or not the move is valid is determined at the first execution.

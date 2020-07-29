@@ -24,26 +24,55 @@ namespace Systems
         private Coroutine _coroutine;
         private List<Command> _priorityCommands;
 
-        private Unit _shadowUnit;
-        private bool _processShadowCommands;
+
+        private HashSet<Command> _finishedCommands;
+        private HashSet<Command> _skippedCommands;
+
+        // private Unit _shadowUnit;
+        // private bool _processShadowCommands;
 
 
-        private bool AllProgrammablesHaveCompletedAllCommands => _programmables.All(p => p.HasCompletedAllCommands());
-        private bool AllPriorityCommandsAreFinished => _priorityCommands.All(p => p.IsFinished());
+        private bool AllProgrammablesHaveCompletedAllCommands => _programmables.All(HasCompletedAllCommands);
 
-        private bool AllCommandsAreFinished =>
+        private bool AllPriorityCommandsAreFinished =>
+            _finishedCommands.Intersect(_priorityCommands).Count() == _priorityCommands.Count;
+
+
+        private bool AllCommandsInCurrentRoundAreFinishedOrSkipped =>
             _programmables.All(p =>
-                p.CurrentCommand() == null || p.CurrentCommand().IsFinished() || p.CurrentCommand().WasSkipped());
+                p.CurrentCommand() == null || _finishedCommands.Contains(p.CurrentCommand()) ||
+                _skippedCommands.Contains(p.CurrentCommand()));
 
-        void Awake()
+
+        private void Awake()
         {
             // _previousCommands = new Dictionary<IProgrammable, Command>();
             _undoStack = new Stack<IEnumerable<Command>>();
             _programmables = FindObjectsOfType<MonoBehaviour>().OfType<IProgrammable>().ToArray();
             _priorityCommands = new List<Command>();
+            _finishedCommands = new HashSet<Command>();
+            _skippedCommands = new HashSet<Command>();
         }
 
         private bool _shouldProcessCommands;
+
+        private bool HasCompletedAllCommands(IProgrammable programmable)
+        {
+            foreach (Command command in programmable.Commands())
+            {
+                bool wasFinished = _finishedCommands.Contains(command);
+                bool wasSkipped = _skippedCommands.Contains(command);
+                if (wasFinished || wasSkipped)
+                {
+                    continue;
+                }
+
+                Debug.Log("Command: " + command + " was not skipped or finished!");
+                return false;
+            }
+
+            return true;
+        }
 
         public void StartProcessingCommands()
         {
@@ -52,24 +81,29 @@ namespace Systems
 
         public void StartProcessingShadowCommands()
         {
-            _processShadowCommands = true;
+            // _processShadowCommands = true;
         }
+
 
         private bool ThereAreCommandsToProcess()
         {
-            return _shouldProcessCommands && _programmables.Any(p => !p.HasCompletedAllCommands());
+            return _shouldProcessCommands && _programmables.Any(p => !HasCompletedAllCommands(p));
         }
+
 
         private void Update()
         {
-            if (_processShadowCommands)
-            {
-                ProcessShadowCommands();
-                return;
-            }
+            // if (_processShadowCommands)
+            // {
+            //     ProcessShadowCommands();
+            //     return;
+            // }
 
             if (!ThereAreCommandsToProcess())
             {
+                // _skippedCommands.Clear();
+                // _finishedCommands.Clear();
+                Debug.Log("There are no commands to process");
                 return;
             }
 
@@ -98,34 +132,59 @@ namespace Systems
                 }
 
                 Command command = programmable.CurrentCommand();
-                if (command.CanBePerformed())
+                bool isValidCommandToExecute =
+                    !(_finishedCommands.Contains(command) || _skippedCommands.Contains(command)) &&
+                    command.CanBePerformed();
+
+                if (isValidCommandToExecute)
                 {
+                    Debug.Log("Executing: " + command);
                     command.Execute(Time.deltaTime);
+                    if (command.IsFinished())
+                    {
+                        Debug.Log("FINISHING COMMAND: " + command);
+                        _finishedCommands.Add(command);
+                    }
                 }
-                else
+                else if (!_skippedCommands.Contains(command) && !_finishedCommands.Contains(command))
                 {
-                    command.Skip();
+                    Debug.Log("SKIPPING COMMAND: " + command);
+                    _skippedCommands.Add(command);
                     OnSkipCommand?.Invoke(command);
                 }
             }
 
-            if (AllCommandsAreFinished)
+            if (AllCommandsInCurrentRoundAreFinishedOrSkipped)
             {
+                Debug.Log("All Commands this round have been finished or skipped");
                 // we perform all priority commands before we move onto the next round of commands
                 foreach (Command command in _priorityCommands)
                 {
+                    if (_finishedCommands.Contains(command))
+                    {
+                        continue;
+                    }
+
                     command.Execute(Time.deltaTime);
+                    if (command.IsFinished())
+                    {
+                        _finishedCommands.Add(command);
+                        // _undoStack.Push(new List<Command> {command});
+                    }
                 }
 
                 if (AllPriorityCommandsAreFinished)
                 {
-                    _priorityCommands.Clear();
+                    Debug.Log("All Priority Commands have finished");
+
                     ProgressToNextCommands();
+                    _priorityCommands.Clear();
                 }
             }
 
             if (AllProgrammablesHaveCompletedAllCommands)
             {
+                Debug.Log("Stopping processing commands");
                 _shouldProcessCommands = false;
             }
         }
@@ -137,15 +196,35 @@ namespace Systems
             foreach (IProgrammable programmable in _programmables)
             {
                 Command command = programmable.CurrentCommand();
-                if (command != null)
+                if (command != null && !_skippedCommands.Contains(command) && _finishedCommands.Contains(command))
                 {
-                    undoList.Add(programmable.CurrentCommand());
+                    Debug.Log("Adding command: " + command + " to the undo stack");
+                    undoList.Add(command);
                 }
 
                 programmable.MoveOntoNextCommand();
             }
 
-            _undoStack.Push(undoList);
+
+            List<Command> priorityList = new List<Command>();
+            foreach (Command c in _priorityCommands)
+            {
+                if (c != null && !_skippedCommands.Contains(c) && _finishedCommands.Contains(c))
+                {
+                    Debug.Log("Adding command: " + c + " to the undo stack");
+                    priorityList.Add(c);
+                }
+            }
+
+            if (undoList.Count > 0)
+            {
+                _undoStack.Push(undoList);
+            }
+
+            if (priorityList.Count > 0)
+            {
+                _undoStack.Push(priorityList);
+            }
         }
 
         public void Undo()
@@ -154,6 +233,7 @@ namespace Systems
             {
                 foreach (Command command in _undoStack.Pop())
                 {
+                    Debug.Log("UNDO: " + command);
                     command.Undo();
                 }
             }

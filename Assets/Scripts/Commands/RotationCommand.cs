@@ -1,4 +1,5 @@
 using System;
+using Core;
 using Movement;
 using UnityEngine;
 
@@ -8,15 +9,18 @@ namespace Commands
     {
         [SerializeField] public RotationDirection direction;
         private Mover _mover;
+        private Health _health;
 
         private Quaternion? _startingRotation;
         private Quaternion _expectedQuaternion;
         private float _expectedY;
 
+        // private bool _finished;
 
         private void Awake()
         {
             _mover = GetComponentInParent<Mover>();
+            _health = GetComponentInParent<Health>();
         }
 
         public override string ToString()
@@ -34,7 +38,7 @@ namespace Commands
 
         protected override bool DoCanPerformCommand()
         {
-            return true; // should always be able to rotate
+            return !_health.IsDead;
         }
 
         public override void Execute(float deltaTime)
@@ -51,6 +55,11 @@ namespace Commands
                 // we need to account for our current angle. We add the rotation angle on top of where we currently are
                 _mover.Rotate(_startingRotation.Value.eulerAngles.y + GetYAxisRotationAngle(direction), deltaTime);
             }
+
+            // if (IsFinished())
+            // {
+            //     _finished = true;
+            // }
         }
 
 
@@ -61,6 +70,11 @@ namespace Commands
 
         public override bool IsFinished()
         {
+            // if (_finished)
+            // {
+            //     return _finished;
+            // }
+
             if (_startingRotation == null)
             {
                 return false;

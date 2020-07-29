@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace Commands
 {
     public interface IProgrammable
@@ -10,5 +12,6 @@ namespace Commands
 
         bool HasCompletedAllCommands();
         // void AddCommand(Command command);
+        IEnumerable<Command> Commands();
     }
 }
