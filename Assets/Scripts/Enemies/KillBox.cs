@@ -27,8 +27,8 @@ namespace Enemies
 
         private void Attack()
         {
-            CommandProcessor.Instance.ExecutePriorityCommand(
-                CommandFactory.CreateAttackCommand(_buffer), 0.5f);
+            MonoCommandProcessor.Instance.ExecutePriorityCommand(
+                CommandFactory.CreateAttackCommand(_buffer));
         }
     }
 }

@@ -15,9 +15,9 @@ namespace Systems
 
         private void Update()
         {
-            if (Input.GetKeyDown(KeyCode.U) && !CommandProcessor.Instance.IsProcessingCommands)
+            if (Input.GetKeyDown(KeyCode.U) && !MonoCommandProcessor.Instance.IsProcessingCommands)
             {
-                CommandProcessor.Instance.Undo();
+                MonoCommandProcessor.Instance.Undo();
             }
 
             if (Input.GetMouseButtonDown(0))

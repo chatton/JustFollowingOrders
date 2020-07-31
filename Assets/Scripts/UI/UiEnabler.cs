@@ -13,7 +13,7 @@ namespace UI
         private void Awake()
         {
             LevelManager.Instance.OnCommandBufferChanged += EnableUi;
-            CommandProcessor.Instance.OnBeginCommandProcessing += DisableUi;
+            MonoCommandProcessor.Instance.OnBeginCommandProcessing += DisableUi;
         }
 
         private void DisableUi()

@@ -72,7 +72,7 @@ namespace Enemies
 
         private void SkipAll()
         {
-            CommandProcessor.Instance.SkipAll(this);
+            // MonoCommandProcessor.Instance.SkipAll(this);
         }
 
         public void MoveOntoNextCommand()
