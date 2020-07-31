@@ -107,6 +107,8 @@ namespace Enemies
         public void Reset()
         {
             Debug.Log("Enemy::Reset");
+            GetComponent<Health>().IsDead = false;
+            _commandIndex = 0;
         }
 
         public IEnumerable<ICommand> Commands()

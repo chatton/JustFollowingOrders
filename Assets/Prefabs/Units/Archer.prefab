@@ -46,7 +46,7 @@ GameObject:
   - component: {fileID: 622929131710758068}
   - component: {fileID: 7576998979576523828}
   - component: {fileID: 1321235966245252361}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Archer
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -95,6 +95,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5cef09af3c7e648a680e1172d2a863dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _hasCompletedAllCommands: 0
 --- !u!65 &6139821661526493168
 BoxCollider:
   m_ObjectHideFlags: 0

@@ -36,6 +36,7 @@ namespace Systems
         {
             if (!_shouldProcessCommands || !_commandProcessor.ThereAreCommandsToProcess())
             {
+                Debug.Log("Not processing commands");
                 return;
             }
 
@@ -50,6 +51,12 @@ namespace Systems
         public void ExecutePriorityCommand(ICommand command)
         {
             _commandProcessor.AddPriorityCommand(command);
+        }
+
+        public void UndoAll()
+        {
+            _shouldProcessCommands = false;
+            _commandProcessor.UndoAll();
         }
     }
 }

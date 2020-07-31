@@ -15,10 +15,10 @@ namespace Core
 
         private void Start()
         {
-            _commands = GetComponentsInChildren<ICommand>().ToList();
+            _commands = new List<ICommand>();
+            // _commands = GetComponentsInChildren<ICommand>().ToList();
         }
 
-        public ICommand ImmediateCommand { get; set; }
         public event Action OnReset;
 
         public void MoveOntoNextCommand()
@@ -44,6 +44,7 @@ namespace Core
         public void Reset()
         {
             _commandIndex = 0;
+            GetComponent<Health>().IsDead = false;
             OnReset?.Invoke();
         }
 

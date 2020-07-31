@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 622929131710758068}
   - component: {fileID: 7576998979576523828}
   - component: {fileID: 1321235966245252361}
-  m_Layer: 9
+  m_Layer: 8
   m_Name: Infantry
   m_TagString: Player
   m_Icon: {fileID: 0}

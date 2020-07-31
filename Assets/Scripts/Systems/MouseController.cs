@@ -19,6 +19,11 @@ namespace Systems
             {
                 MonoCommandProcessor.Instance.Undo();
             }
+            
+            if (Input.GetKeyDown(KeyCode.R))
+            {
+                MonoCommandProcessor.Instance.UndoAll();
+            }
 
             if (Input.GetMouseButtonDown(0))
             {

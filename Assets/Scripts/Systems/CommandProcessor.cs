@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Commands;
 using System.Linq;
@@ -188,6 +189,18 @@ namespace Systems
         public void AddPriorityCommand(ICommand command)
         {
             _priorityCommands.Add(command);
+        }
+
+        public void UndoAll()
+        {
+            while (_undoStack.Count > 0)
+            {
+                Undo();
+            }
+
+            Array.ForEach(_programmables, p => p.Reset());
+            _finishedCommands.Clear();
+            _skippedCommands.Clear();
         }
     }
 }
