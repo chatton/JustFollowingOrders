@@ -1,4 +1,5 @@
 using Core;
+using World;
 
 namespace Commands
 {
@@ -24,7 +25,11 @@ namespace Commands
             }
 
             return false;
-            // return _isFinished;
+        }
+
+        public Tile GetEndTile()
+        {
+            return null;
         }
 
         public override string ToString()

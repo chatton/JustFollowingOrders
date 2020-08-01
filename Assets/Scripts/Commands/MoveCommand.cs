@@ -2,12 +2,13 @@ using System;
 using Core;
 using Movement;
 using UnityEngine;
+using World;
 
 namespace Commands
 {
     public class MoveCommand : ICommand
     {
-        [SerializeField] public MoveDirection direction;
+        public readonly MoveDirection Direction;
         private Mover _mover;
         private Animator _animator;
         private Health _health;
@@ -25,7 +26,7 @@ namespace Commands
 
         public MoveCommand(MoveDirection direction, Mover mover, Animator animator, Health health)
         {
-            this.direction = direction;
+            this.Direction = direction;
             _mover = mover;
             _animator = animator;
             _health = health;
@@ -35,7 +36,7 @@ namespace Commands
 
         public override string ToString()
         {
-            return direction.ToString();
+            return Direction.ToString();
         }
 
         public bool CanBeExecuted()
@@ -48,7 +49,7 @@ namespace Commands
             if (_doable == null)
             {
                 // whether or not the move is valid is determined at the first execution.
-                _doable = _mover.CanMoveInDirection(direction);
+                _doable = _mover.CanMoveInDirection(Direction);
             }
 
             return _doable.Value;
@@ -59,32 +60,13 @@ namespace Commands
             // compute relative position when execute is called
             if (_targetPosition == null)
             {
-                _targetPosition = GetTargetPosition(direction);
+                _targetPosition = GetTargetPosition();
                 Transform t = _mover.transform;
                 _initialPosition = t.position;
                 _initialRotation = t.rotation;
             }
 
-            // float speedPerSec = Vector3.Distance(_oldPos, transform.parent.position) / deltaTime;
-            // float speed = Vector3.Distance(_oldPos, transform.parent.position) / deltaTime;
-            // Debug.Log(speed);
-            // _oldPos = transform.parent.position;
-
-            // if (_targetPosition == transform.position)
-            // {
-            //     Debug.Log("HERE!");
-            //     _animator.SetFloat(Speed, 0f);
-            // }
-            // else
-            // {
             _animator.SetFloat(Speed, 1f);
-            // }
-
-
-            // if (IsAtTargetPosition)
-            // {
-            //     _animator.SetFloat(Speed, 0f);
-            // }
 
             _mover.MoveTowards(_targetPosition.Value, deltaTime);
         }
@@ -101,12 +83,18 @@ namespace Commands
             return IsAtTargetPosition;
         }
 
-        private Vector3 GetTargetPosition(MoveDirection moveDirection)
+        public Tile GetEndTile()
+        {
+            Debug.Log("_targetPosition=" + _targetPosition);
+            return null;
+        }
+
+        public Vector3 GetTargetPosition()
         {
             Transform moverTransform = _mover.transform;
             Vector3 pos = moverTransform.position;
 
-            switch (moveDirection)
+            switch (Direction)
             {
                 case MoveDirection.Forward:
                     return pos + moverTransform.forward.normalized;
@@ -118,7 +106,7 @@ namespace Commands
                     return pos - moverTransform.right.normalized;
             }
 
-            throw new Exception("Unexpected move direction: " + moveDirection);
+            throw new Exception("Unexpected move direction: " + Direction);
         }
     }
 }

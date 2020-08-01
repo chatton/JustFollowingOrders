@@ -17,6 +17,7 @@ namespace Systems
         public event Action OnBeginCommandProcessing;
         public event Action<ICommand> OnSkipCommand;
 
+        private bool _hasBegun = false;
         private CommandProcessor _commandProcessor;
         private bool _shouldProcessCommands;
 
@@ -37,7 +38,14 @@ namespace Systems
             if (!_shouldProcessCommands || !_commandProcessor.ThereAreCommandsToProcess())
             {
                 Debug.Log("Not processing commands");
+                _hasBegun = false;
                 return;
+            }
+
+            if (!_hasBegun)
+            {
+                _hasBegun = true;
+                OnBeginCommandProcessing?.Invoke();
             }
 
             _commandProcessor.ProcessCommands(Time.deltaTime);

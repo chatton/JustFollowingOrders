@@ -104,17 +104,18 @@ namespace Movement
             Vector3 startingPosition = StartPosition(direction);
 
             // shoot a raycast down to see if there is a tile that we can walk on
-            if (Physics.Raycast(startingPosition + transform.up * 2, -transform.up, out RaycastHit hit, 100f))
+            if (Physics.Raycast(startingPosition + transform.up * 2, -transform.up, out RaycastHit hit, 2f,
+                LayerMask.GetMask("Tile")))
             {
                 // a key will always be on a walkable tile
-                if (hit.collider.CompareTag("Key"))
-                {
-                    return true;
-                }
+                // if (hit.collider.CompareTag("Key"))
+                // {
+                //     return true;
+                // }
 
                 Tile t = hit.collider.gameObject.GetComponent<Tile>();
 
-                return t != null;
+                return t.IsWalkable;
             }
 
 

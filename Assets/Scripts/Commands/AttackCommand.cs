@@ -1,6 +1,7 @@
 using System;
 using Core;
 using UnityEngine;
+using World;
 
 namespace Commands
 {
@@ -93,6 +94,11 @@ namespace Commands
             bool isFinished = _attackerDead || (_enemyDead && _finishedAttackAnimation);
             Debug.Log("ATTACK FINISHED: " + isFinished);
             return isFinished;
+        }
+
+        public Tile GetEndTile()
+        {
+            return null;
         }
     }
 }
