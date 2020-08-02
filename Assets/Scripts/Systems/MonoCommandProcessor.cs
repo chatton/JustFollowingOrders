@@ -1,12 +1,8 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using Commands;
 using UnityEngine;
 using Util;
 using System.Linq;
-using Core;
-using Enemies;
 
 namespace Systems
 {
@@ -65,6 +61,7 @@ namespace Systems
         {
             _shouldProcessCommands = false;
             _commandProcessor.UndoAll();
+            LevelManager.Instance.ResetKey();
         }
     }
 }

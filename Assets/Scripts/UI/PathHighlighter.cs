@@ -10,7 +10,7 @@ namespace UI
 {
     public struct PathNode
     {
-        public Vector3? position;
+        public Vector3 position;
         public int turnNo;
     }
 
@@ -42,11 +42,8 @@ namespace UI
             Gizmos.color = Color.red;
             foreach (PathNode n in _path)
             {
-                if (n.position.HasValue)
-                {
-                    Debug.Log(n.position.Value);
-                    Gizmos.DrawWireSphere(n.position.Value, 0.5f);
-                }
+                Debug.Log(n.position);
+                Gizmos.DrawWireSphere(n.position, 0.5f);
             }
         }
 
@@ -79,6 +76,7 @@ namespace UI
 
         private void HighlightTiles(CommandBuffer buffer)
         {
+            Debug.Log("HighlightTiles");
             UnhighlightTiles();
             GameObject go = new GameObject();
             Transform bufferTransform = buffer.transform;
@@ -96,25 +94,23 @@ namespace UI
                 {
                     case MoveCommand moveCommand:
                         go.transform.position = GetVector3ToDrawAt(moveCommand, go.transform);
-                        _path.Add(new PathNode
-                        {
-                            turnNo = turnNo,
-                            position = go.transform.position + Vector3.up
-                        });
-                        // _path.Add(go.transform.position + Vector3.up);
                         break;
                     case RotationCommand rotationCommand:
                         go.transform.Rotate(Vector3.up,
                             RotationCommand.GetYAxisRotationAngle(rotationCommand.Direction));
                         break;
-                    case AttackCommand attackCommand:
-                        break;
-                    case WaitCommand waitCommand:
+                    case AttackCommand _:
+                    case WaitCommand _:
                         break;
                     default:
                         throw new Exception("Unknown command type! " + selectedCommand);
                 }
 
+                _path.Add(new PathNode
+                {
+                    turnNo = turnNo,
+                    position = go.transform.position + Vector3.up
+                });
                 turnNo++;
             }
 
@@ -122,14 +118,11 @@ namespace UI
 
             foreach (PathNode n in _path)
             {
-                if (n.position.HasValue)
+                if (Physics.Raycast(n.position, Vector3.down, out RaycastHit hit, 10f,
+                    LayerMask.GetMask("Tile")))
                 {
-                    if (Physics.Raycast(n.position.Value, Vector3.down, out RaycastHit hit, 10f,
-                        LayerMask.GetMask("Tile")))
-                    {
-                        Tile t = hit.collider.GetComponent<Tile>();
-                        t.LightUp(n.turnNo);
-                    }
+                    Tile t = hit.collider.GetComponent<Tile>();
+                    t.LightUp(n.turnNo);
                 }
             }
         }

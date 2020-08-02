@@ -16,7 +16,7 @@ namespace Core
         private void OnTriggerEnter(Collider other)
         {
             LevelManager.Instance.HasKey = true;
-            Destroy(gameObject);
+            gameObject.SetActive(false);
         }
     }
 }

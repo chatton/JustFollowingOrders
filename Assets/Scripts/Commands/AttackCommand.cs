@@ -87,6 +87,10 @@ namespace Commands
         {
             Debug.Log("Setting " + _health.name + " to active!");
             _health.gameObject.SetActive(true);
+            _health.IsDead = false;
+            _hasAttacked = false;
+            _elapsedTime = 0;
+            _finishedAttackAnimation = false;
         }
 
         public bool IsFinished()

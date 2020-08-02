@@ -10,10 +10,16 @@ namespace Systems
     public class LevelManager : Singleton<LevelManager>
     {
         public bool HasKey { get; set; }
+        private Key _key;
 
         public event Action<CommandBuffer> OnCommandBufferChanged;
 
         private CommandBuffer _selectedCommandBuffer;
+
+        private void Awake()
+        {
+            _key = FindObjectOfType<Key>();
+        }
 
         public CommandBuffer SelectedCommandBuffer
         {
@@ -52,6 +58,12 @@ namespace Systems
         public void LoadNextLevel()
         {
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+        }
+
+        public void ResetKey()
+        {
+            HasKey = false;
+            _key.gameObject.SetActive(true);
         }
 
         // ResetLevel will undo every command that has been executed effectively resetting the state
