@@ -17,6 +17,14 @@ namespace Systems
         // command has finished executing
         private readonly HashSet<ICommand> _finishedCommands;
         private readonly HashSet<ICommand> _skippedCommands;
+        private ICommand _currCommand;
+
+        // private bool AllProgrammablesHaveCompletedAllCommands => _programmables.All(HasCompletedAllCommands);
+        //
+        // private bool AllCommandsInCurrentRoundAreFinishedOrSkipped =>
+        //     _programmables.All(p =>
+        //         p.CurrentCommand() == null || _finishedCommands.Contains(p.CurrentCommand()) ||
+        //         _skippedCommands.Contains(p.CurrentCommand()));
 
 
         public CommandProcessor(IProgrammable[] programmables)
@@ -79,51 +87,59 @@ namespace Systems
             return haveRegularCommands || havePriorityCommands;
         }
 
+
         public void ProcessCommands(float deltaTime)
         {
-            foreach (ICommand command in _priorityCommands)
+            if (_priorityCommands.Count > 0 && _finishedCommands.Contains(_currCommand))
             {
-                if (_finishedCommands.Contains(command))
+                foreach (ICommand command in _priorityCommands)
                 {
-                    Debug.Log("Command: " + command + " is already finished.");
-                    continue;
+                    if (_finishedCommands.Contains(command))
+                    {
+                        Debug.Log("Command: " + command + " is already finished.");
+                        continue;
+                    }
+
+                    command.Execute(deltaTime);
+                    if (command.IsFinished())
+                    {
+                        Debug.Log("FINISHING PRIORITY COMMAND: " + command);
+                        _finishedCommands.Add(command);
+                    }
                 }
 
-                command.Execute(deltaTime);
-                if (command.IsFinished())
+                if (!AllPriorityCommandsAreFinished)
                 {
-                    Debug.Log("FINISHING PRIORITY COMMAND: " + command);
-                    _finishedCommands.Add(command);
+                    return;
                 }
             }
 
-            // we haven't finished all the priority commands yet, don't progress onto regular ones
-            if (!AllPriorityCommandsAreFinished)
+
+            if (AllPriorityCommandsAreFinished)
             {
-                return;
+                AddPriorityCommandsToUndoStack();
+                _priorityCommands.Clear();
             }
 
-            AddPriorityCommandsToUndoStack();
-            _priorityCommands.Clear();
 
-            ICommand commandToExecute =
+            _currCommand =
                 _programmables.Where(p => p.HasNextCommand()).Where(p =>
                         !_finishedCommands.Contains(p.CurrentCommand()) &&
                         !_skippedCommands.Contains(p.CurrentCommand()))
                     .Where(p => p.CurrentCommand().CanBeExecuted())
                     .Select(p => p.CurrentCommand()).FirstOrDefault();
 
-            if (commandToExecute == null)
+            if (_currCommand == null)
             {
                 Debug.Log("ALL COMMANDS DONE!");
                 ProgressToNextCommands();
                 return;
             }
 
-            commandToExecute.Execute(deltaTime);
-            if (commandToExecute.IsFinished())
+            _currCommand.Execute(deltaTime);
+            if (_currCommand.IsFinished())
             {
-                _finishedCommands.Add(commandToExecute);
+                _finishedCommands.Add(_currCommand);
             }
         }
 

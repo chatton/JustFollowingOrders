@@ -2107,22 +2107,22 @@ PrefabInstance:
     - target: {fileID: 8589960756250878961, guid: a4942d601a533427bb05797a10286830,
         type: 3}
       propertyPath: commandTypes.Array.size
-      value: 0
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 8589960756250878961, guid: a4942d601a533427bb05797a10286830,
         type: 3}
       propertyPath: commandTypes.Array.data[0]
-      value: 6
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8589960756250878961, guid: a4942d601a533427bb05797a10286830,
         type: 3}
       propertyPath: commandTypes.Array.data[1]
-      value: 7
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8589960756250878961, guid: a4942d601a533427bb05797a10286830,
         type: 3}
       propertyPath: commandTypes.Array.data[2]
-      value: 6
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8589960756250878961, guid: a4942d601a533427bb05797a10286830,
         type: 3}
