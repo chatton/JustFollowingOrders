@@ -1,5 +1,6 @@
 ﻿using System;
 using Commands;
+using Core;
 using UnityEngine;
 using World;
 
@@ -40,6 +41,11 @@ namespace Movement
             }
         }
 
+        public bool HasReachedPosition(Vector3 position)
+        {
+            return transform.position == position;
+        }
+
         public void Rotate(float yAxisAngle, float deltaTime)
         {
             Quaternion targetRotation = Quaternion.RotateTowards(transform.rotation, Quaternion.Euler(0, yAxisAngle, 0),
@@ -52,15 +58,6 @@ namespace Movement
         private void OnDrawGizmosSelected()
         {
             Gizmos.color = Color.red;
-            // Gizmos.DrawLine(StartPosition(MoveDirection.Right) + transform.up * 2f,
-            //     StartPosition(MoveDirection.Right) - Vector3.down);
-            // Gizmos.DrawLine(StartPosition(MoveDirection.Left) + transform.up * 2f,
-            //     StartPosition(MoveDirection.Left) - Vector3.down);
-            // Gizmos.DrawLine(StartPosition(MoveDirection.Back) + transform.up * 2f,
-            //     StartPosition(MoveDirection.Back) - Vector3.down);
-            // Gizmos.DrawLine(StartPosition(MoveDirection.Forward) + transform.up * 2f,
-            //     StartPosition(MoveDirection.Forward) - Vector3.down);
-
             Gizmos.DrawLine(StartPosition(MoveDirection.Right) + Vector3.up * 2f,
                 StartPosition(MoveDirection.Right) - Vector3.down);
             Gizmos.DrawLine(StartPosition(MoveDirection.Left) + Vector3.up * 2f,
@@ -85,18 +82,14 @@ namespace Movement
                     return transform.position + -transform.forward;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(direction), direction, "Unknown direction!");
-
-                // case MoveDirection.Forward:
-                //     return transform.position + Vector3.forward;
-                // case MoveDirection.Left:
-                //     return transform.position + Vector3.left;
-                // case MoveDirection.Right:
-                //     return transform.position + Vector3.right;
-                // case MoveDirection.Back:
-                //     return transform.position + Vector3.back;
-                // default:
-                //     throw new ArgumentOutOfRangeException(nameof(direction), direction, "Unknown direction!");
             }
+        }
+
+
+        private void Update()
+        {
+            Vector3 startingPosition = StartPosition(MoveDirection.Forward);
+            Debug.DrawRay(startingPosition + transform.up * 4, -transform.up * 4, Color.red);
         }
 
         public bool CanMoveInDirection(MoveDirection direction)
@@ -107,17 +100,9 @@ namespace Movement
             if (Physics.Raycast(startingPosition + transform.up * 2, -transform.up, out RaycastHit hit, 2f,
                 LayerMask.GetMask("Tile")))
             {
-                // a key will always be on a walkable tile
-                // if (hit.collider.CompareTag("Key"))
-                // {
-                //     return true;
-                // }
-
                 Tile t = hit.collider.gameObject.GetComponent<Tile>();
-
-                return t.IsWalkable;
+                return t.IsEmpty;
             }
-
 
             return false;
         }

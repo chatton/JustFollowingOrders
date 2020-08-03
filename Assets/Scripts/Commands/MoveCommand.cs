@@ -1,4 +1,6 @@
 using System;
+using System.Collections;
+using Systems;
 using Core;
 using Movement;
 using UnityEngine;
@@ -26,7 +28,7 @@ namespace Commands
 
         public MoveCommand(MoveDirection direction, Mover mover, Animator animator, Health health)
         {
-            this.Direction = direction;
+            Direction = direction;
             _mover = mover;
             _animator = animator;
             _health = health;

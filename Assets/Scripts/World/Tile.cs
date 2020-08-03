@@ -10,6 +10,9 @@ namespace World
         private TextMesh _3dText;
 
         public bool IsWalkable = true;
+
+        public bool IsEmpty => IsWalkable && !Physics.Raycast(transform.position, transform.up);
+        
         private Camera _camera;
 
         private void Awake()
@@ -22,7 +25,7 @@ namespace World
         {
             highlightTile.SetActive(true);
             _3dText.text = roundNum.ToString();
-
+            // _3dText.transform.LookAt(_camera.transform);
             // snap to looking towards camera at 90 degrees
             // _3dText.transform.eulerAngles = new Vector3(transform.eulerAngles.x, (Mathf.Round(_camera.transform.eulerAngles.y / 90) * 90), transform.eulerAngles.z);
             _3dText.transform.eulerAngles = new Vector3(transform.eulerAngles.x, _camera.transform.eulerAngles.y,

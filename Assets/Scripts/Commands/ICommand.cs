@@ -1,3 +1,4 @@
+using System.Collections;
 using World;
 
 namespace Commands
@@ -8,6 +9,5 @@ namespace Commands
         void Execute(float timeDelta);
         void Undo();
         bool IsFinished();
-        Tile GetEndTile();
     }
 }

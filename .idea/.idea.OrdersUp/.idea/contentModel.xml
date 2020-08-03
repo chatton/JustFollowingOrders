@@ -7,6 +7,10 @@
       <e p="Assembly-CSharp.csproj" t="IncludeRecursive" />
       <e p="Assets" t="Include">
         <e p="PaidAssets" t="Include">
+          <e p="AllSkyFree" t="Include">
+            <e p="AllSkyFree_Menu.cs" t="Include" />
+            <e p="AllSkyFree_Readme.txt" t="Include" />
+          </e>
           <e p="KUBIKOS - World" t="Include">
             <e p="Scripts" t="Include">
               <e p="EnableCameraDepthInForward.cs" t="Include" />
@@ -51,9 +55,9 @@
         <e p="Scripts" t="Include">
           <e p="Commands" t="Include">
             <e p="AttackCommand.cs" t="Include" />
-            <e p="Command.cs" t="Include" />
             <e p="CommandFactory.cs" t="Include" />
             <e p="CommandType.cs" t="Include" />
+            <e p="ICommand.cs" t="Include" />
             <e p="IProgrammable.cs" t="Include" />
             <e p="MoveCommand.cs" t="Include" />
             <e p="MoveDirection.cs" t="Include" />
@@ -69,6 +73,7 @@
             <e p="Unit.cs" t="Include" />
           </e>
           <e p="Enemies" t="Include">
+            <e p="CommandType.cs" t="Include" />
             <e p="Enemy.cs" t="Include" />
             <e p="KillBox.cs" t="Include" />
           </e>
@@ -79,12 +84,14 @@
             <e p="CommandBuffer.cs" t="Include" />
             <e p="CommandProcessor.cs" t="Include" />
             <e p="LevelManager.cs" t="Include" />
+            <e p="MonoCommandProcessor.cs" t="Include" />
             <e p="MouseController.cs" t="Include" />
             <e p="ShadowCommandProcessor.cs" t="Include" />
           </e>
           <e p="UI" t="Include">
             <e p="ActionButton.cs" t="Include" />
             <e p="CurrentOrders.cs" t="Include" />
+            <e p="PathHighlighter.cs" t="Include" />
             <e p="UIEnabler.cs" t="Include" />
           </e>
           <e p="Util" t="Include">

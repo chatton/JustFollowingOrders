@@ -76,15 +76,12 @@ namespace UI
 
         private void HighlightTiles(CommandBuffer buffer)
         {
-            Debug.Log("HighlightTiles");
             UnhighlightTiles();
             GameObject go = new GameObject();
             Transform bufferTransform = buffer.transform;
             go.transform.position = bufferTransform.position;
             go.transform.rotation = bufferTransform.rotation;
             ClearPath();
-            Vector3 startPos = go.transform.position + Vector3.up;
-            Debug.Log("startPos: " + startPos);
             IEnumerable<ICommand> selectedCommands = buffer.Commands;
 
             int turnNo = 1;
