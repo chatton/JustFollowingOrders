@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using Systems;
+using Commands;
 using UnityEngine;
 using Util;
 
@@ -12,7 +14,7 @@ namespace UI
 
         private void Awake()
         {
-            LevelManager.Instance.OnCommandBufferChanged += EnableUi;
+            LevelManager.Instance.OnCommandChanged += EnableUi;
             MonoCommandProcessor.Instance.OnBeginCommandProcessing += DisableUi;
         }
 
@@ -21,10 +23,10 @@ namespace UI
             ui.SetActive(false);
         }
 
-        private void EnableUi(CommandBuffer buffer)
+        private void EnableUi(GameObject _, List<ICommand> commands)
         {
             ui.SetActive(true);
-            issueOrdersButton.SetActive(buffer.Commands.Count > 0);
+            issueOrdersButton.SetActive(commands.Count > 0);
         }
     }
 }

@@ -1,19 +1,13 @@
 ﻿using System;
 using Systems;
 using Commands;
+using Core;
 using UnityEngine;
 
 namespace Enemies
 {
     public class KillBox : MonoBehaviour
     {
-        private CommandBuffer _buffer;
-
-        private void Awake()
-        {
-            _buffer = GetComponentInParent<CommandBuffer>();
-        }
-
         private void OnTriggerEnter(Collider other)
         {
             if (!other.CompareTag("Player"))
@@ -27,8 +21,13 @@ namespace Enemies
 
         private void Attack()
         {
+            if (GetComponentInParent<Health>().IsDead)
+            {
+                return;
+            }
+
             MonoCommandProcessor.Instance.ExecutePriorityCommand(
-                CommandFactory.CreateAttackCommand(_buffer));
+                CommandFactory.CreateAttackCommand(transform.parent.gameObject));
         }
     }
 }

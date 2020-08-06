@@ -1,5 +1,7 @@
 ﻿using System;
+using Commands;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using Util;
 
 namespace Systems
@@ -19,10 +21,14 @@ namespace Systems
             {
                 MonoCommandProcessor.Instance.Undo();
             }
-            
+
             if (Input.GetKeyDown(KeyCode.R))
             {
-                MonoCommandProcessor.Instance.UndoAll();
+                SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+                // MonoCommandProcessor.Instance.Reset();
+                return;
+                // MonoCommandProcessor.Instance.UndoAll();
+                // return;
             }
 
             if (Input.GetMouseButtonDown(0))
@@ -35,14 +41,15 @@ namespace Systems
                         return;
                     }
 
-                    LevelManager.Instance.SelectedCommandBuffer = hit.collider.GetComponent<CommandBuffer>();
+                    LevelManager.Instance.CurrentUnit = hit.collider.gameObject;
                 }
             }
 
             if (Input.GetMouseButtonDown(1))
             {
-                if (LevelManager.Instance.SelectedCommandBuffer != null)
+                if (LevelManager.Instance.CurrentUnit != null)
                 {
+                    Debug.Log("REMOVE");
                     LevelManager.Instance.RemoveCommand();
                 }
             }

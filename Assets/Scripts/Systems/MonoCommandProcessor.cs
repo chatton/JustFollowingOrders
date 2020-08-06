@@ -3,6 +3,7 @@ using Commands;
 using UnityEngine;
 using Util;
 using System.Linq;
+using Enemies;
 
 namespace Systems
 {
@@ -63,6 +64,15 @@ namespace Systems
             _commandProcessor.UndoAll();
             LevelManager.Instance.ResetKey();
         }
-        
+
+        public void Reset()
+        {
+            // Enemy[] enemies = FindObjectsOfType<Enemy>();
+            
+            IProgrammable[] programmables = FindObjectsOfType<MonoBehaviour>().OfType<IProgrammable>().ToArray();
+            
+            _commandProcessor = new CommandProcessor(programmables);
+            _shouldProcessCommands = false;
+        }
     }
 }

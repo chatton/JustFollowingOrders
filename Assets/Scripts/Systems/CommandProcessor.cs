@@ -90,6 +90,7 @@ namespace Systems
 
         public void ProcessCommands(float deltaTime)
         {
+            Debug.Log(_currCommand);
             if (_priorityCommands.Count > 0 && _finishedCommands.Contains(_currCommand))
             {
                 foreach (ICommand command in _priorityCommands)
@@ -182,6 +183,7 @@ namespace Systems
         {
             _priorityCommands.Add(command);
         }
+
 
         public void UndoAll()
         {

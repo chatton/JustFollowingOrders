@@ -78,6 +78,8 @@ namespace Commands
             Transform t = _mover.transform;
             t.position = _initialPosition;
             t.rotation = _initialRotation;
+            _targetPosition = null;
+            _doable = null;
         }
 
         public bool IsFinished()
@@ -85,13 +87,7 @@ namespace Commands
             return IsAtTargetPosition;
         }
 
-        public Tile GetEndTile()
-        {
-            Debug.Log("_targetPosition=" + _targetPosition);
-            return null;
-        }
-
-        public Vector3 GetTargetPosition()
+        private Vector3 GetTargetPosition()
         {
             Transform moverTransform = _mover.transform;
             Vector3 pos = moverTransform.position;

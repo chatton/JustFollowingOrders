@@ -14,7 +14,7 @@ namespace UI
         private void Awake()
         {
             text.text = "No Orders";
-            LevelManager.Instance.OnCommandBufferChanged += UpdateVisuals;
+            LevelManager.Instance.OnCommandChanged += UpdateVisuals;
             MonoCommandProcessor.Instance.OnSkipCommand += HandleSkippedCommand;
         }
 
@@ -80,9 +80,9 @@ namespace UI
             return sb.ToString();
         }
 
-        private void UpdateVisuals(CommandBuffer selectedCommandBuffer)
+        private void UpdateVisuals(GameObject _, List<ICommand> commands)
         {
-            text.text = BuildCommandString(selectedCommandBuffer.Commands.ToArray());
+            text.text = BuildCommandString(commands.ToArray());
         }
     }
 }

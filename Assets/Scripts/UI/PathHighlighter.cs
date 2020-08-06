@@ -23,7 +23,7 @@ namespace UI
         {
             _path = new List<PathNode>();
             _allTiles = FindObjectsOfType<Tile>();
-            LevelManager.Instance.OnCommandBufferChanged += HighlightTiles;
+            LevelManager.Instance.OnCommandChanged += HighlightTiles;
             MonoCommandProcessor.Instance.OnBeginCommandProcessing += UnhighlightTiles;
         }
 
@@ -49,10 +49,6 @@ namespace UI
 
         private Vector3 GetVector3ToDrawAt(MoveCommand moveCommand, Transform bufferTransform)
         {
-            // Vector3 moveDestination = moveCommand.GetTargetPosition();
-            // moveDestination.y = 1;
-            // return moveDestination;
-
             switch (moveCommand.Direction)
             {
                 case MoveDirection.Forward:
@@ -74,18 +70,17 @@ namespace UI
             _path.Clear();
         }
 
-        private void HighlightTiles(CommandBuffer buffer)
+        private void HighlightTiles(GameObject currentUnit, List<ICommand> commands)
         {
             UnhighlightTiles();
             GameObject go = new GameObject();
-            Transform bufferTransform = buffer.transform;
+            Transform bufferTransform = currentUnit.transform;
             go.transform.position = bufferTransform.position;
             go.transform.rotation = bufferTransform.rotation;
             ClearPath();
-            IEnumerable<ICommand> selectedCommands = buffer.Commands;
 
             int turnNo = 1;
-            foreach (ICommand selectedCommand in selectedCommands)
+            foreach (ICommand selectedCommand in commands)
             {
                 switch (selectedCommand)
                 {

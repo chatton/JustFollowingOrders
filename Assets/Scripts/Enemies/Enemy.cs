@@ -24,7 +24,6 @@ namespace Enemies
 
         private void Start()
         {
-            _buffer = GetComponent<CommandBuffer>();
             _commands = BuildCommands();
             _health = GetComponent<Health>();
             _health.OnHit += SkipAll;
@@ -39,28 +38,28 @@ namespace Enemies
                 switch (commandType)
                 {
                     case CommandType.MoveForward:
-                        allCommands.Add(CommandFactory.CreateMovementCommand(MoveDirection.Forward, _buffer));
+                        allCommands.Add(CommandFactory.CreateMovementCommand(MoveDirection.Forward, gameObject));
                         break;
                     case CommandType.MoveBack:
-                        allCommands.Add(CommandFactory.CreateMovementCommand(MoveDirection.Back, _buffer));
+                        allCommands.Add(CommandFactory.CreateMovementCommand(MoveDirection.Back, gameObject));
                         break;
                     case CommandType.MoveLeft:
-                        allCommands.Add(CommandFactory.CreateMovementCommand(MoveDirection.Left, _buffer));
+                        allCommands.Add(CommandFactory.CreateMovementCommand(MoveDirection.Left, gameObject));
                         break;
                     case CommandType.MoveRight:
-                        allCommands.Add(CommandFactory.CreateMovementCommand(MoveDirection.Right, _buffer));
+                        allCommands.Add(CommandFactory.CreateMovementCommand(MoveDirection.Right, gameObject));
                         break;
                     case CommandType.Attack:
-                        allCommands.Add(CommandFactory.CreateAttackCommand(_buffer));
+                        allCommands.Add(CommandFactory.CreateAttackCommand(gameObject));
                         break;
                     case CommandType.Wait:
-                        allCommands.Add(CommandFactory.CreateWaitCommand(_buffer));
+                        allCommands.Add(CommandFactory.CreateWaitCommand(gameObject));
                         break;
                     case CommandType.RotateLeft:
-                        allCommands.Add(CommandFactory.CreateRotationCommand(RotationDirection.Left, _buffer));
+                        allCommands.Add(CommandFactory.CreateRotationCommand(RotationDirection.Left, gameObject));
                         break;
                     case CommandType.RotateRight:
-                        allCommands.Add(CommandFactory.CreateRotationCommand(RotationDirection.Right, _buffer));
+                        allCommands.Add(CommandFactory.CreateRotationCommand(RotationDirection.Right, gameObject));
                         break;
                     default:
                         throw new ArgumentOutOfRangeException();

@@ -20,8 +20,9 @@ namespace Commands
         private bool _finishedAttackAnimation;
         private bool _attackerDead;
 
-        public AttackCommand(Animator animator, Health health, Attacker attacker)
+        public AttackCommand(Animator animator, Attacker attacker)
         {
+            Debug.Log("New Attack Command! " + attacker.name);
             _animator = animator;
             // _health = health;
             _attacker = attacker;
@@ -43,6 +44,7 @@ namespace Commands
             {
                 return true;
             }
+
             return _attacker.GetTargetInRange() != null;
         }
 
@@ -85,18 +87,20 @@ namespace Commands
 
         public void Undo()
         {
-            Debug.Log("Setting " + _health.name + " to active!");
             _health.gameObject.SetActive(true);
             _health.IsDead = false;
             _hasAttacked = false;
             _elapsedTime = 0;
             _finishedAttackAnimation = false;
+            _attackerDead = false;
+            Debug.Log("Setting " + _health.name + " to active!");
         }
 
         public bool IsFinished()
         {
             bool isFinished = _attackerDead || (_enemyDead && _finishedAttackAnimation);
-            Debug.Log("ATTACK FINISHED: " + isFinished);
+            Debug.Log("ATTACK FINISHED: isFinished=" + isFinished + " _attackerDead=" + _attackerDead + " _enemyDead=" + _enemyDead +
+                      " _finishedAttackAnimation=" + _finishedAttackAnimation + " attackerName="+_attacker.name);
             return isFinished;
         }
 

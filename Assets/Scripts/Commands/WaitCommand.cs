@@ -7,7 +7,7 @@ namespace Commands
     {
         private bool _isFinished;
         private float _elapsedTime;
-        private float _finishedAfter = 0.5f;
+        private float _finishedAfter = 0.1f;
         private Health _health;
 
 
@@ -26,12 +26,7 @@ namespace Commands
 
             return false;
         }
-
-        public Tile GetEndTile()
-        {
-            return null;
-        }
-
+        
         public override string ToString()
         {
             return "Wait";

@@ -8,11 +8,11 @@ namespace UI
 {
     public class ActionButton : MonoBehaviour
     {
-        private Dictionary<string, Func<CommandBuffer, ICommand>> _commandFuncs;
+        private Dictionary<string, Func<GameObject, ICommand>> _commandFuncs;
 
         private void Awake()
         {
-            _commandFuncs = new Dictionary<string, Func<CommandBuffer, ICommand>>
+            _commandFuncs = new Dictionary<string, Func<GameObject, ICommand>>
             {
                 {
                     "MoveForward",
@@ -45,16 +45,9 @@ namespace UI
         public void EnqueueAction(string actionName)
         {
             LevelManager lm = LevelManager.Instance;
-            if (lm.SelectedCommandBuffer == null)
-            {
-                Debug.Log("There was no selected command buffer!");
-                return;
-            }
-
-            ICommand cmd = _commandFuncs[actionName].Invoke(lm.SelectedCommandBuffer);
+            ICommand cmd = _commandFuncs[actionName].Invoke(lm.CurrentUnit );
+            Debug.Log("Adding command: " + cmd);
             lm.AddCommand(cmd);
-            // TODO: implement hinting for commands
-            // ShadowCommandProcessor.Instance.ProcessShadowCommand(cmd);
         }
     }
 }

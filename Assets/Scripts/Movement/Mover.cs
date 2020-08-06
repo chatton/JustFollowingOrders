@@ -101,6 +101,7 @@ namespace Movement
                 LayerMask.GetMask("Tile")))
             {
                 Tile t = hit.collider.gameObject.GetComponent<Tile>();
+                Debug.Log("CanMoveInDirection:" + t.name + " IsEmpty: " + t.IsEmpty);
                 return t.IsEmpty;
             }
 
